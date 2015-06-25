@@ -1,0 +1,7 @@
+(ns consulate-simple.app
+  (:require [consulate-simple.core :as core]))
+
+;;ignore println statements in prod
+(set! *print-fn* (fn [& _]))
+
+(core/init!)
