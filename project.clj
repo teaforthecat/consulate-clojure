@@ -29,7 +29,8 @@
                  [cljs-ajax "0.3.13"]
                  ;;new
                   [cheshire "5.4.0"]
-                  [http-kit "2.1.16"]]
+                  [http-kit "2.1.16"]
+                  [clojurewerkz/route-one "1.1.0"]]
 
   :min-lein-version "2.0.0"
   :uberjar-name "consulate-simple.jar"
@@ -78,7 +79,7 @@
                  :compiler {:optimizations :advanced :pretty-print false}}}}
 
              :aot :all}
-   :dev {:dependencies [[ring-mock "0.1.5"]
+   :project/dev {:dependencies [[ring-mock "0.1.5"]
                         [ring/ring-devel "1.3.2"]
                         [pjstadig/humane-test-output "0.7.0"]
                         [lein-figwheel "0.3.3"]
@@ -99,4 +100,6 @@
          :repl-options {:init-ns consulate-simple.core}
          :injections [(require 'pjstadig.humane-test-output)
                       (pjstadig.humane-test-output/activate!)]
-         :env {:dev true}}})
+         :env {:dev true}}
+   ; merges the above with the :profiles/dev section in the untracked file: ./profiles.clj for env settings
+   :dev [:project/dev :profiles/dev]})

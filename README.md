@@ -1,6 +1,6 @@
 # consulate-simple
 
-something something
+A luminus project (+cljs) wih a simple consul http adapter
 
 ## Prerequisites
 
