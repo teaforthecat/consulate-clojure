@@ -1,5 +1,6 @@
 (ns consulate-simple.consul
   (:require
+    [clojure.string :refer (blank?)]
     [taoensso.timbre :as timbre]
     [cheshire.core :refer (generate-string parse-string)]
     [ring.util.codec :as codec]
@@ -58,7 +59,9 @@
     (url-for (get-in consul-resources resource) args)))
 
 (defn decode [s]
-  (String. (codec/base64-decode s)))
+  (if (blank? s)
+    s
+    (String. (codec/base64-decode s))))
 
 
 ;; kv
@@ -83,7 +86,7 @@
     response))
 
 (defn put-kv
-  "get the value of a key or keys"
+  "get the value of a key or keys; returns true or false"
   [key value]
   (call client/put (url [:kv] {:key key}) value ))
 

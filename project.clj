@@ -30,7 +30,8 @@
                  ;;new
                   [cheshire "5.4.0"]
                   [http-kit "2.1.16"]
-                  [clojurewerkz/route-one "1.1.0"]]
+                  [clojurewerkz/route-one "1.1.0"]
+                  [byte-streams "0.2.0"]]
 
   :min-lein-version "2.0.0"
   :uberjar-name "consulate-simple.jar"

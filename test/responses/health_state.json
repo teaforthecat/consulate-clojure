@@ -1,0 +1,22 @@
+[
+  {
+    "Node": "foobar",
+    "CheckID": "serfHealth",
+    "Name": "Serf Health Status",
+    "Status": "passing",
+    "Notes": "",
+    "Output": "",
+    "ServiceID": "",
+    "ServiceName": ""
+  },
+  {
+    "Node": "foobar",
+    "CheckID": "service:redis",
+    "Name": "Service 'redis' check",
+    "Status": "passing",
+    "Notes": "",
+    "Output": "",
+    "ServiceID": "redis",
+    "ServiceName": "redis"
+  }
+]

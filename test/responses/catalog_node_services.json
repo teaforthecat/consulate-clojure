@@ -1,0 +1,22 @@
+{
+  "Node": {
+    "Node": "foobar",
+    "Address": "10.1.10.12"
+  },
+  "Services": {
+    "consul": {
+      "ID": "consul",
+      "Service": "consul",
+      "Tags": null,
+      "Port": 8300
+    },
+    "redis": {
+      "ID": "redis",
+      "Service": "redis",
+      "Tags": [
+        "v1"
+      ],
+      "Port": 8000
+    }
+  }
+}
