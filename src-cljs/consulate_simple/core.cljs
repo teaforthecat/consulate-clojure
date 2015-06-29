@@ -5,42 +5,17 @@
             [goog.events :as events]
             [goog.history.EventType :as EventType]
             [markdown.core :refer [md->html]]
+            [consulate-simple.partials :refer [navbar]]
+            [consulate-simple.pages :refer [pages]]
             [ajax.core :refer [GET POST]])
   (:import goog.History))
 
-(defn navbar []
-  [:div.navbar.navbar-inverse.navbar-fixed-top
-   [:div.container
-    [:div.navbar-header
-     [:a.navbar-brand {:href "#/"} "myapp"]]
-    [:div.navbar-collapse.collapse
-     [:ul.nav.navbar-nav
-      [:li {:class (when (= :home (session/get :page)) "active")}
-       [:a {:href "#/"} "Home"]]
-      [:li {:class (when (= :about (session/get :page)) "active")}
-       [:a {:href "#/about"} "About"]]]]]])
+(def config (atom {}))
 
-(defn about-page []
-  [:div "this is the story of consulate-simple... work in progress"])
-
-(defn home-page []
-  [:div.container
-   [:div.jumbotron
-    [:h1 "Welcome to consulate-simple"]
-    [:p "Time to start building your site!"]
-    [:p [:a.btn.btn-primary.btn-lg {:href "http://luminusweb.net"} "Learn more »"]]]
-   [:div.row
-    [:div.col-md-12
-     [:h2 "Welcome to ClojureScript"]]]
-   (when-let [docs (session/get :docs)]
-             [:div.row
-              [:div.col-md-12
-               [:div {:dangerouslySetInnerHTML
-                      {:__html (md->html docs)}}]]])])
-
-(def pages
-  {:home #'home-page
-   :about #'about-page})
+(defn get-config []
+  (GET "config.edn"
+      :handler  #(swap! config (partial merge %))
+      :error-handler (fn [] (.log js/console "using default configuration"))))
 
 (defn page []
   [(pages (session/get :page))])
@@ -77,8 +52,7 @@
 
 (defn init! []
   (fetch-docs!)
+  (get-config)
   (hook-browser-navigation!)
   (session/put! :page :home)
   (mount-components))
-
-

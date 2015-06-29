@@ -10,3 +10,5 @@ profiles.clj
 /.env
 *.log
 resources/public/js
+/.repl/
+/resources/public/config.edn
