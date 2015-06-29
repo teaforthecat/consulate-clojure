@@ -10,12 +10,11 @@
             [ajax.core :refer [GET POST]])
   (:import goog.History))
 
-(def config (atom {}))
+(defonce app-state (reagent/atom
+                    {:datacenters []} ))
 
-(defn get-config []
-  (GET "config.edn"
-      :handler  #(swap! config (partial merge %))
-      :error-handler (fn [] (.log js/console "using default configuration"))))
+(defn update-app-state [path value]
+  (swap! app-state assoc-in path value))
 
 (defn page []
   [(pages (session/get :page))])
@@ -29,6 +28,11 @@
 
 (secretary/defroute "/about" []
   (session/put! :page :about))
+
+(secretary/defroute "/consul" []
+  (consul/get-datacenters app-state)
+  (session/put! :page :datacenters))
+
 
 ;; -------------------------
 ;; History
@@ -52,7 +56,7 @@
 
 (defn init! []
   (fetch-docs!)
-  (get-config)
+  (consulate-simple.config/get-config)
   (hook-browser-navigation!)
   (session/put! :page :home)
   (mount-components))

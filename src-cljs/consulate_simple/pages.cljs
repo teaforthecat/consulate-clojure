@@ -1,5 +1,6 @@
 (ns consulate-simple.pages
-  (:require [reagent.session :as session]
+  (:require [consulate-simple.partials :as p]
+            [reagent.session :as session]
             [markdown.core :refer [md->html]]))
 
 
@@ -21,8 +22,53 @@
                [:div {:dangerouslySetInnerHTML
                       {:__html (md->html docs)}}]]])])
 
+(defn datacenters-page [doc]
+  [:div.wrapper
+   [p/header]
+   (into [:div.flexcontainer.wrap.column] ;;todo allow a "datacenters" div in css to contain them
+         (map p/datacenter (:datacenters doc)))])
+
+
+(defn detail-page [doc]
+  [:div.wrapper
+   [p/header]
+   [:div.content.flexChild.rowParent
+
+    [:div.flexChild {:id "rowUpstream"}
+
+     [:div.flexChild {:id "columnChild86333"}
+      [:p.titles
+       [:a {:href "/"} "Parents / Upstream"]]]
+
+     [:div.flexChild {:id "columnChild75902"}
+      [:p.titles
+       [:a {:href "/"} "Another Process"]]]]
+
+
+    [:div.flexChild {:id "rowDetailView"}
+     [:div.dash_box
+      [:div.opc_holder
+       [:div.span.opc {:class "Running"}
+        p/image-spacer
+        p/image-opcsprite]]
+      [:div.h1 {:class "green"} "Eden Prairie"]
+      (p/status-text "Healthy" "green")
+      (p/opstate-text "Running" "green")
+      (p/detail-buttons)]]
+
+    [:div.flexChild {:id "rowDownstream"}
+
+     [:div.flexChild {:id "columnChild86333"}
+      [:p.titles
+       [:a {:href "/"} "Children / Downstream"]]]
+
+     [:div.flexChild {:id "columnChild86333"}
+      [:p.titles
+       [:a {:href "/"} "A process Name"]]]]]])
 
 
 (def pages
   {:home #'home-page
-   :about #'about-page})
+   :about #'about-page
+   :datacenters #'datacenters-page
+   :detail  #'detail-page})
