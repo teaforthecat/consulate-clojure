@@ -10,8 +10,12 @@
 (defn home-page []
   (layout/render "home.html"))
 
+(defn consul-page []
+  (layout/render "consul.html"))
+
 (defroutes home-routes
   (GET "/" [] (home-page))
+  (GET "/consul" [] (consul-page))
   (GET "/docs" [] (ok (-> "docs/docs.md" io/resource slurp))))
 
 

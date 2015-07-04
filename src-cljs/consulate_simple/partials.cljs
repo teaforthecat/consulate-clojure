@@ -5,19 +5,21 @@
 (def color-states {"Failing" "red"
                    "Healthy" "green"})
 
-(def color-op-states {"Down" "yellow"
-                      "Running" "green"
-                      "Test" "yellow"})
+(def color-op-states {"down"    "yellow"
+                      "active"  "green"
+                      "standby" "yellow"
+                      "test"    "yellow"})
 
-(def operational-states {"Down" "down"
-                         "Running" "up"
-                         "Test" "test"})
+(def operational-states {"down" "down"
+                         "active" "up"
+                         "standby" "up"
+                         "test" "test"})
 
 
 (defn image-header-logo []
   [:img {:alt "Consulate Dashboard Logo"
          :border "0"
-         :src "images/consulate_logo.png"
+         :src "img/consulate_logo.png"
          :title "&amp;lt; Back to Dashboard"
          :width "300em"}])
 
@@ -31,14 +33,16 @@
       [:li {:class (when (= :home (session/get :page)) "active")}
        [:a {:href "#/"} "Home"]]
       [:li {:class (when (= :about (session/get :page)) "active")}
-       [:a {:href "#/about"} "About"]]]]]])
+       [:a {:href "#/about"} "About"]]
+      [:li {:class (when (= :datacenters (session/get :page)) "active")}
+       [:a {:href "#/consul"} "Consul"]]]]]])
 
 
 (def image-spacer
-  [:img.spacer {:src "images/spacer.png"}])
+  [:img.spacer {:src "img/spacer.png"}])
 
 (def image-opcsprite
-  [:img.opcsprite {:src "images/opstate.png"}])
+  [:img.opcsprite {:src "img/opstate.png"}])
 
 
 (defn status-text [text color]
@@ -57,9 +61,9 @@
 
 (defn datacenter [dc]
   (let [name (:name dc)
-        stx (:status-text dc)
-        otx (:opstate-text dc)
-        color (or (get color-states stx) "unknown")
+        stx (:health_status dc)
+        otx (:op_state dc)
+        main_color (or (get color-states stx) "unknown")
         op_color (or (get color-op-states otx ) "unknown")
         op_state (or (get operational-states otx) "unknown")]
     [:div.div.datacenter ; todo swap div for datacenter in css
@@ -68,11 +72,11 @@
        [:div.span.opc {:class op_state}
         image-spacer
         image-opcsprite]]
-      [:a {:href  "#/detail"
+      [:a {:href  (str "#/consul/datacenters/" name)
            ;(routes/path-for :detail-page)
            }
-       [:div.h1 {:class color} name]]
-      (status-text stx color)
+       [:div.h1 {:class main_color} name]]
+       (status-text stx main_color)
       (opstate-text otx op_color)
       (detail-buttons)]]))
 
@@ -82,3 +86,9 @@
     [:div.consulate_logo
      [:a {:href (:root-path config)}
       (image-header-logo)]]])
+
+
+(defn row-parent [{:keys [id title link]}]
+  [:div.flexChild {:id id}
+   [:p.titles
+    [:a {:href link} title]]])

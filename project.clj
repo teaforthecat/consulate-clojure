@@ -3,7 +3,7 @@
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
 
-  :dependencies [[org.clojure/clojure "1.7.0-RC2"]
+  :dependencies [[org.clojure/clojure "1.7.0"]
                  [selmer "0.8.2"]
                  [com.taoensso/timbre "3.4.0"]
                  [com.taoensso/tower "3.0.2"]
@@ -28,17 +28,20 @@
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [cljs-ajax "0.3.13"]
                  ;;new
-                  [cheshire "5.4.0"]
-                  [http-kit "2.1.16"]
-                  [clojurewerkz/route-one "1.1.0"]
-                  [byte-streams "0.2.0"]]
+                 [cheshire "5.4.0"]
+                 [http-kit "2.1.16"]
+                 [clojurewerkz/route-one "1.1.0"]
+                 [byte-streams "0.2.0"]
+                 [com.rpl/specter "0.6.1"]
+                 [datascript "0.11.4"]
+                 ]
 
   :min-lein-version "2.0.0"
   :uberjar-name "consulate-simple.jar"
   :jvm-opts ["-server"]
 
-;;enable to start the nREPL server when the application launches
-;:env {:repl-port 7001}
+  ;;enable to start the nREPL server when the application launches
+                                        ;:env {:repl-port 7001}
 
   :main consulate-simple.core
 
@@ -65,42 +68,48 @@
       :externs ["react/externs/react.js"]
       :optimizations :none
       :output-to "resources/public/js/app.js"
+      :warnings {:single-segment-namespace false}
       :pretty-print true}}}}
 
 
   :profiles
   {:uberjar {:omit-source true
              :env {:production true}
-              :hooks [leiningen.cljsbuild]
-              :cljsbuild
-              {:jar true
-               :builds
-               {:app
-                {:source-paths ["env/prod/cljs"]
-                 :compiler {:optimizations :advanced :pretty-print false}}}}
+             :hooks [leiningen.cljsbuild]
+             :cljsbuild
+             {:jar true
+              :builds
+              {:app
+               {:source-paths ["env/prod/cljs"]
+                :compiler {:optimizations :advanced :pretty-print false}}}}
 
              :aot :all}
    :project/dev {:dependencies [[ring-mock "0.1.5"]
-                        [ring/ring-devel "1.3.2"]
-                        [pjstadig/humane-test-output "0.7.0"]
-                        [lein-figwheel "0.3.3"]
-                        [org.clojure/tools.nrepl "0.2.10"]]
-         :plugins [[lein-figwheel "0.3.3"]]
-          :cljsbuild
-          {:builds
-           {:app
-            {:source-paths ["env/dev/cljs"] :compiler {:source-map true}}}}
+                                [ring/ring-devel "1.3.2"]
+                                [pjstadig/humane-test-output "0.7.0"]
+                                [lein-figwheel "0.3.3"]
+                                [org.clojure/tools.nrepl "0.2.10"]]
+                 :plugins [[lein-figwheel "0.3.3"]]
 
-         :figwheel
-         {:http-server-root "public"
-          :server-port 3449
-          :nrepl-port 7002
-          :css-dirs ["resources/public/css"]
-          :ring-handler consulate-simple.handler/app}
+                 :cljsbuild
+                 {:builds {:app {
+                                  :source-paths ["env/dev/cljs"]
+                                  :compiler {:source-map true
+                                             :warnings {:single-segment-namespace false}
+                                             }
+                                  }}
+                          }
 
-         :repl-options {:init-ns consulate-simple.core}
-         :injections [(require 'pjstadig.humane-test-output)
-                      (pjstadig.humane-test-output/activate!)]
-         :env {:dev true}}
-   ; merges the above with the :profiles/dev section in the untracked file: ./profiles.clj for env settings
+                 :figwheel
+                 {:http-server-root "public"
+                  :server-port 3449
+                  :nrepl-port 7002
+                  :css-dirs ["resources/public/css"]
+                  :ring-handler consulate-simple.handler/app}
+
+                 :repl-options {:init-ns consulate-simple.core}
+                 :injections [(require 'pjstadig.humane-test-output)
+                              (pjstadig.humane-test-output/activate!)]
+                 :env {:dev true}}
+                                        ; merges the above with the :profiles/dev section in the untracked file: ./profiles.clj for env settings
    :dev [:project/dev :profiles/dev]})

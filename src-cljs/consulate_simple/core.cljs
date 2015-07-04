@@ -5,19 +5,22 @@
             [goog.events :as events]
             [goog.history.EventType :as EventType]
             [markdown.core :refer [md->html]]
+            [consulate-simple.consul :as consul]
             [consulate-simple.partials :refer [navbar]]
             [consulate-simple.pages :refer [pages]]
+            ;; [consulate-simple.db :as db]
             [ajax.core :refer [GET POST]])
   (:import goog.History))
 
 (defonce app-state (reagent/atom
-                    {:datacenters []} ))
+                    {:datacenters []
+                     :history []} ))
 
 (defn update-app-state [path value]
   (swap! app-state assoc-in path value))
 
 (defn page []
-  [(pages (session/get :page))])
+  [(pages (session/get :page)) app-state])
 
 ;; -------------------------
 ;; Routes
@@ -33,6 +36,9 @@
   (consul/get-datacenters app-state)
   (session/put! :page :datacenters))
 
+(secretary/defroute "/consul/datacenters/:name" [name]
+  (consul/get-datacenter-detail name app-state)
+  (session/put! :page :detail))
 
 ;; -------------------------
 ;; History
@@ -58,5 +64,8 @@
   (fetch-docs!)
   (consulate-simple.config/get-config)
   (hook-browser-navigation!)
-  (session/put! :page :home)
-  (mount-components))
+  (secretary/dispatch! (.-hash js/window.location))
+  (mount-components)
+  ;; (db/link-state app-state)
+  (consul/initialize-data app-state)
+  )
