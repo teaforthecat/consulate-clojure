@@ -39,7 +39,16 @@
        (map p/row-parent (:parents detail []) )
        [:div.flexChild {:id "columnChild75902"}
         [:p.titles
-         [:a {:href "/"} "Another Process"]]]]
+         [:button
+          {:on-click #(swap! doc assoc :new-service-form true)}
+          "Parents / Upstream (+)"]
+         (if (true? (:new-service-form @doc))
+           [:div.form
+            [:input {:field :text :id :new-service} ]
+            [:button {:on-click #(swap! doc dissoc :new-service-form)}
+             "Enter"]])
+
+         ]]]
 
 
       [:div.flexChild {:id "rowDetailView"}
