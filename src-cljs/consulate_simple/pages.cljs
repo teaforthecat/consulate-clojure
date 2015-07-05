@@ -1,6 +1,7 @@
 (ns consulate-simple.pages
   (:require [consulate-simple.partials :as p]
             [reagent.session :as session]
+            [reagent-forms.core :refer [bind-fields]]
             [markdown.core :refer [md->html]]))
 
 
@@ -44,11 +45,13 @@
           "Parents / Upstream (+)"]
          (if (true? (:new-service-form @doc))
            [:div.form
-            [:input {:field :text :id :new-service} ]
+            [bind-fields [:input {:field :text :id :new-service}] doc]
             [:button {:on-click #(swap! doc dissoc :new-service-form)}
              "Enter"]])
+         ]]
+       (p/row-parent {:id "new-service" :title (:new-service @doc) :link "" })
 
-         ]]]
+       ]
 
 
       [:div.flexChild {:id "rowDetailView"}
