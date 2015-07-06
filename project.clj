@@ -34,6 +34,7 @@
                  [byte-streams "0.2.0"]
                  [com.rpl/specter "0.6.1"]
                  [datascript "0.11.4"]
+                 [cljs-http "0.1.35"]
                  ]
 
   :min-lein-version "2.0.0"

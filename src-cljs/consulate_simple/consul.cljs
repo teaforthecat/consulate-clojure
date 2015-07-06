@@ -1,11 +1,16 @@
 (ns consulate-simple.consul
-  (:require [consulate-simple.config :refer (config)]
-            ;; [consulate-simple.routes :refer (path-for)]
-            ;; [com.rpl.specter :as s]
-            ;; [consulate-simple.db :as db]
-            [ajax.core :refer [GET PUT POST]]))
+  (:require-macros [cljs.core.async.macros :refer [go]])
+  (:require
+    [consulate-simple.config :refer (config)]
+    ;; [consulate-simple.routes :refer (path-for)]
+    ;; [com.rpl.specter :as s]
+    ;; [consulate-simple.db :as db]
+    [cljs-http.client :as http]
+    [cljs.core.async :refer [<! take!]]
+    [ajax.core :refer [GET PUT POST]]))
 
 (def datacenters-path (str (:root-path config) "api/catalog/datacenters"))
+(def kv-path (str (:root-path config) "api/kv"))
 
 (defrecord Datacenter [name op_state status])
 
@@ -22,6 +27,12 @@
   (if-not (:datacenters app-state) (get-datacenters app-state))
   (swap! app-state assoc-in [:detail] (datacenter name)))
 
+(defn put-kv [key value]
+  (http/put (str kv-path "/" key) {:edn-params value}))
+
+
+(defn get-kv [key & options]
+  (http/get (str kv-path "/" key) {:edn-params options}))
 
 ;; (defn get-datacenter-detail [name app-state]
 ;;   (let [q [:datacenters s/ALL #(= name (:name %))]

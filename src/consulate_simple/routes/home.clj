@@ -27,8 +27,10 @@
 (defroutes api-routes
   (context "/api" []
     (context "/kv" []
-      (GET "/:key" [key] (ok (consul/get-kv key))) ;; get-kv
-      (PUT "/:key" [key] (fn [req]
+      (GET ["/:key" :key #"[a-z/]+"] [key recurse] (ok (if recurse
+                                                         (consul/get-kv-list key)
+                                                         (consul/get-kv key)))) ;; get-kv
+      (PUT ["/:key" :key #"[a-z/]+"] [key] (fn [req]
                            (let [value (coerce-body req)]
                              ;; stored as a string
                              (consul/put-kv key value)
