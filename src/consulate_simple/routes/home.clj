@@ -1,11 +1,12 @@
 (ns consulate-simple.routes.home
   (:require [consulate-simple.layout :as layout]
             [compojure.core :refer [defroutes GET PUT routes make-route context]]
-            [ring.util.http-response :refer [ok]]
+            [ring.util.http-response :refer [ok not-found bad-gateway]]
             [consulate-simple.consul :as consul]
             [clojure.java.io :as io]
             [byte-streams :as bs]
-            [taoensso.timbre :as timbre]))
+            [taoensso.timbre :as timbre])
+  (:import clojure.lang.ExceptionInfo))
 
 (defn home-page []
   (layout/render "home.html"))
@@ -27,9 +28,20 @@
 (defroutes api-routes
   (context "/api" []
     (context "/kv" []
-      (GET ["/:key" :key #"[a-z/]+"] [key recurse] (ok (if recurse
-                                                         (consul/get-kv-list key)
-                                                         (consul/get-kv key)))) ;; get-kv
+      (GET ["/:key" :key #"[a-z/]+"] [key recurse] (try
+                                                     (let [result (if recurse
+                                                                    (consul/get-kv-list key)
+                                                                    (consul/get-kv key))]
+                                                       (ok result))
+                                                     (catch ExceptionInfo e ;; proxy error handling
+                                                       (let [consul-response (.getData e)]
+                                                         (if (= 404 (:status consul-response))
+                                                           (let [message (str "key not found: " key)]
+                                                             (timbre/info message)
+                                                             (not-found message))
+                                                           (let [message (str "received: " (:status consul-response) " " (:body consul-response))]
+                                                             (timbre/error message)
+                                                             (bad-gateway message))))))) ;; get-kv
       (PUT ["/:key" :key #"[a-z/]+"] [key] (fn [req]
                            (let [value (coerce-body req)]
                              ;; stored as a string

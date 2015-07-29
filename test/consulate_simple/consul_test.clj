@@ -3,7 +3,8 @@
             [ring.util.codec :as codec]
             [clojure.string :as s]
             [cheshire.core :refer (generate-string parse-string)]
-            [consulate-simple.consul :as consul]))
+            [consulate-simple.consul :as consul])
+    (:import clojure.lang.ExceptionInfo))
 
 (defn test-get [url request-body]
   (let [dummy-promise (promise)
@@ -21,6 +22,15 @@
     (deliver p {:status 200 :body (slurp path)})
     (fn [url request-body] p))) ;;signature of 'get; fake promise
 
+(defn test-get-not-found []
+  (let [p (promise)]
+    (deliver p {:status 400 :body "not found"})
+    (fn [url request-body] p))) ;;signature of 'get; fake promise
+
+
+(deftest consul-not-found
+  (with-redefs [org.httpkit.client/get (test-get-not-found)]
+    (is (thrown? ExceptionInfo (consul/get-kv "nothing")))))
 
 
 (deftest consul-kv
@@ -35,7 +45,6 @@
   (with-redefs [org.httpkit.client/get (test-get-file :kv)]
     (is (= (consul/get-kv-list "anything" ) ;; get-kv-list
            [{"zip" "test"}]))) ;; note: keys are strings
-
   )
 
 (deftest consul-catalog

@@ -89,6 +89,6 @@
 
 
 (defn row-parent [{:keys [id title link]}]
-  [:div.flexChild {:id id}
+  [:div.flexChild {:id id :key id}
    [:p.titles
     [:a {:href link} title]]])

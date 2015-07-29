@@ -38,6 +38,10 @@
     [:div.col-md-2 [:label label]]
     [:div.col-md-5 input]])
 
+(defn add-parent [key value]
+  (let [new-parent {:id key :title value :link "wut"}]
+    (swap! consulate-simple.core/app-state update-in [:detail :parents] conj new-parent)))
+
 (defn get-consul-kv [key & options]
   (go
       (prn options)
@@ -49,7 +53,9 @@
   (go
     (let [response (<! (consul/put-kv key value))]
       (prn (:status response))
-      (prn (:body response)))))
+      (prn (:body response))
+      (if (= 200 (:status response))
+        (add-parent key value)))))
 
 (defn new-service-form-handler [doc event]
   (let [{:keys [consul-key consul-value] :as new-service} (:new-service-form @doc)

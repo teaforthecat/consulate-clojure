@@ -1,7 +1,9 @@
 (ns consulate-simple.test.handler
   (:require [clojure.test :refer (deftest testing is)]
             [ring.mock.request :refer (request)]
-            [consulate-simple.handler :refer (app)]))
+            [consulate-simple.handler :refer (app)]
+            [taoensso.timbre :as timbre])
+  (:import clojure.lang.ExceptionInfo))
 
 (deftest test-app
   (testing "main route"
@@ -17,8 +19,16 @@
           (is (= "world" (:body response))))
         (let [response (app (request :put "/api/kv/hello" "world"))]
           (is (= 200 (:status response)))
-          (is (= "success\n" (:body response)))))))
+          (is (= "success\n" (:body response)))))
+      (testing "not-found response from consul"
+        (with-redefs [consulate-simple.consul/get-kv (fn [key]
+                                                       (throw (ExceptionInfo. (str "not found")
+                                                                              {:status 404 :body "not found"})))
+                      taoensso.timbre/info (fn [m])]
+          (let [response (app (request :get "/api/kv/nothing"))]
+            (is (= 404 (:status response))))))))
   ;; etc...
   (testing "not-found route"
-    (let [response (app (request :get "/invalid"))]
-      (is (= 404 (:status response))))))
+    (with-redefs [taoensso.timbre/info (fn [m])]
+      (let [response (app (request :get "/invalid"))]
+        (is (= 404 (:status response)))))))
