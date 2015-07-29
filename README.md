@@ -30,7 +30,6 @@ M-x cider-connect
 ```
 
 ```clojure
-user> (use 'figwheel-sidecar.repl-api)
 user> (cljs-repl)
 ```
 
