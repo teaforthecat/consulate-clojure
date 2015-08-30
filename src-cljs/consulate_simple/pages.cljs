@@ -115,19 +115,26 @@
         (p/opstate-text "Running" "green")
         (p/detail-buttons)]]
 
-      [:div.flexChild {:id "rowDownstream"}
+      [:div.flexChild {:class "rowDownstream"}
 
-       [:div.flexChild {:id "columnChild86333"}
+       [:div.flexChild {:class "columnChild"}
         [:p.titles
          [:a {:href "/"} "Children / Downstream"]]]
 
-       [:div.flexChild {:id "columnChild86333"}
+       [:div.flexChild {:class "columnChild"}
         [:p.titles
-         [:a {:href "/"} "A process Name"]]]]]]))
+         [:a {:href "/"} "A process Name"]]]
 
+       [:div.flexChild {:class "columnChild"}
+        [:p.titles
+         [:a {:href "/"} "A process Name 2"]]]]]]))
+
+(defn not-found [doc]
+  [:div "404 Not found"])
 
 (def pages
   {:home #'home-page
    :about #'about-page
+   :not-found #'not-found
    :datacenters #'datacenters-page
    :detail  #'detail-page})

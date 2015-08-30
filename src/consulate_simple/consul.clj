@@ -10,8 +10,6 @@
     )
   (:import clojure.lang.ExceptionInfo))
 
-;; see conjul
-
 (timbre/refer-timbre)
 
 (defn call
@@ -19,7 +17,7 @@
    [verb url & [body]]
    (let [request-body (if body {:body (if (string? body) body (generate-string body))})]
      (let [{:keys [status body] :as res} @(verb url request-body)]
-       (if-not (and (> status 199) (< status 299))
+       (if-not (and status (> status 199) (< status 299))
          (throw (ExceptionInfo. (str "return code was " status ", not 200 something, using: " verb " result: " ) res))
          (parse-string body (fn [k] (keyword (.toLowerCase k))))
          ))))

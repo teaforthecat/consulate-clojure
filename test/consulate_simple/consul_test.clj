@@ -27,6 +27,9 @@
     (deliver p {:status 400 :body "not found"})
     (fn [url request-body] p))) ;;signature of 'get; fake promise
 
+#_(deftest consul-not-connected ;;not sure how to replicate real connection failure
+  (with-redefs [org.httpkit.client/get {}]
+    (is (thrown? ExceptionInfo (consul/get-kv "nothing")))))
 
 (deftest consul-not-found
   (with-redefs [org.httpkit.client/get (test-get-not-found)]

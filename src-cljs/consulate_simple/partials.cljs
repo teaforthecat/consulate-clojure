@@ -76,9 +76,9 @@
            ;(routes/path-for :detail-page)
            }
        [:div.h1 {:class main_color} name]]
-       (status-text stx main_color)
-      (opstate-text otx op_color)
-      (detail-buttons)]]))
+      [status-text stx main_color]
+      [opstate-text otx op_color]
+      [detail-buttons]]]))
 
 
 (defn header []
