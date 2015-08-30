@@ -87,6 +87,15 @@
         the-form
         add-form-button))))
 
+(defn expand-child [event child-name doc]
+  (println "expanding-child")
+  (println event)
+  (println child-name)
+  (println doc)
+  (go
+    (let [{status :status nodes :body} (<! (consul/get-service-nodes child-name))]
+      (swap! doc update-in [:detail :children :expanded] nodes))))
+
 ;; (defn new-service-form []
 ;;   (fn [doc]
 ;;     [:div [:p [:a "hello"]]]))
@@ -115,19 +124,25 @@
         (p/opstate-text "Running" "green")
         (p/detail-buttons)]]
 
-      [:div.flexChild {:class "rowDownstream"}
+      [into [:div.flexChild {:class "rowDownstream"}]
+       (map (fn [child]
+              (let [child_name (first child)]
+                [:div.flexChild {:class "columnChild"}
+                 [:p.titles
+                  [:a {:href "javascript: void(0);"
+                       :onclick (fn [event] (expand-child event child_name doc) )
+                       }
+                   (name child_name)]]
+                 ]))
+            (:children detail))]
+      ;; [into [:div.flexChild {:class "rowDownstream"} ]
+      ;;  (map
+      ;;   (fn [{:keys [node address serviceport]}]
+      ;;     [:div.flexchild.expanded node])
 
-       [:div.flexChild {:class "columnChild"}
-        [:p.titles
-         [:a {:href "/"} "Children / Downstream"]]]
+      ;;   (get-in detail [:children :expanded]))]
 
-       [:div.flexChild {:class "columnChild"}
-        [:p.titles
-         [:a {:href "/"} "A process Name"]]]
-
-       [:div.flexChild {:class "columnChild"}
-        [:p.titles
-         [:a {:href "/"} "A process Name 2"]]]]]]))
+      ]]))
 
 (defn not-found [doc]
   [:div "404 Not found"])

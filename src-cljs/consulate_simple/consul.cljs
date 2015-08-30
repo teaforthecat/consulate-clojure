@@ -11,6 +11,9 @@
 
 (def datacenters-path (str (:root-path config) "api/catalog/datacenters"))
 (def kv-path (str (:root-path config) "api/kv"))
+(def nodes-path (str (:root-path config) "api/catalog/nodes"))
+(def services-path (str (:root-path config) "api/catalog/services"))
+(def service-nodes-path (str (:root-path config) "api/catalog/service/"))
 
 (defrecord Datacenter [name op_state status])
 
@@ -23,6 +26,9 @@
       :handler #(swap! app-state update-in [:datacenters] (fn [] (map datacenter %)))
       ))
 
+(defn get-datacenters-async []
+  (http/get datacenters-path))
+
 (defn get-datacenter-detail [name app-state]
   (if-not (:datacenters app-state) (get-datacenters app-state))
   (swap! app-state assoc-in [:detail] (datacenter name)))
@@ -33,6 +39,15 @@
 
 (defn get-kv [key & options]
   (http/get (str kv-path "/" key) {:edn-params options}))
+
+(defn get-services []
+  (http/get services-path))
+
+(defn get-service-nodes [service-name]
+  (http/get (str service-nodes-path service-name)))
+
+(defn get-nodes []
+  (http/get (str nodes-path)))
 
 ;; (defn get-datacenter-detail [name app-state]
 ;;   (let [q [:datacenters s/ALL #(= name (:name %))]

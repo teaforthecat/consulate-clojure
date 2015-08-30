@@ -1,6 +1,8 @@
 (ns consulate-simple.core
+  (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [reagent.core :as reagent :refer [atom]]
             [reagent.session :as session]
+            [cljs.core.async :refer [<! >! take! put!]]
             [secretary.core :as secretary :include-macros true]
             [goog.events :as events]
             [goog.history.EventType :as EventType]
@@ -20,7 +22,37 @@
   (swap! app-state assoc-in path value))
 
 (defn page []
-  [(pages (session/get :page)) app-state])
+  [(pages (or (session/get :page) :not-found)) app-state])
+
+
+;; -------------------------
+;; Handlers
+
+(defn consul-handler []
+  (consul/get-datacenters app-state)
+  (session/put! :page :datacenters))
+
+(defn datacenter-handler [name]
+  (go
+    ;; if we already have datacenters then use it, else fetch it
+    ;; there is only one consul resource for all datacenters
+    (let [dcs (or (get @app-state :datacenters)
+                  (let [{:keys [status body]} (<! (consul/get-datacenters-async))]
+                    (if (and (= 200 status) body)
+                      (let [new-dcs (map consul/datacenter body)]
+                        (update-app-state [:datacenters] new-dcs)
+                        new-dcs)
+                      (println "oh no! ..."))))]
+
+      (if (some #(= name (:name %)) dcs) ;;"name" exists
+        (do
+          (update-app-state [:detail] (consul/datacenter name))
+          (let [{status :status services :body} (<! (consul/get-services))]
+            (if (and (= 200 status) services)
+              (update-app-state [:detail :children] services)))
+          (session/put! :page :detail))
+        (session/put! :page :not-found)))))
+
 
 ;; -------------------------
 ;; Routes
@@ -33,12 +65,10 @@
   (session/put! :page :about))
 
 (secretary/defroute "/consul" []
-  (consul/get-datacenters app-state)
-  (session/put! :page :datacenters))
+  (consul-handler))
 
 (secretary/defroute "/consul/datacenters/:name" [name]
-  (consul/get-datacenter-detail name app-state)
-  (session/put! :page :detail))
+  (datacenter-handler name))
 
 ;; -------------------------
 ;; History

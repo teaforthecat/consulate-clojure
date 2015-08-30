@@ -92,3 +92,8 @@
   [:div.flexChild {:id id :key id}
    [:p.titles
     [:a {:href link} title]]])
+
+(defn related-element [{:keys [title link]}]
+  [:div.flexChild {:class "related-element"}
+   [:p.titles
+    [:a {:href link} title]]])

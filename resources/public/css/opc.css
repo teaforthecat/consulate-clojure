@@ -1,5 +1,4 @@
 /* Consulate CSS Reset */
-/* line 3, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
   margin: 0;
   padding: 0;
@@ -10,43 +9,34 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   font-family: "Exo", sans-serif; }
 
 /* HTML5 display-role reset for old browsers */
-/* line 14, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
   display: block; }
 
-/* line 17, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 body {
   line-height: 1em; }
 
-/* line 20, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 ol, ul {
   list-style: none; }
 
-/* line 23, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 blockquote, q {
   quotes: none; }
 
-/* line 27, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 blockquote:before, blockquote:after {
   content: "";
   content: none; }
 
-/* line 32, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 q:before, q:after {
   content: "";
   content: none; }
 
-/* line 36, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 table {
   border-collapse: collapse;
   border-spacing: 0; }
 
 /* End of CSS Reset */
-/* line 42, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary {
   display: block; }
 
-/* line 45, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .body {
   font: 0.66667 Arial, sans-serif;
   min-height: 100%;
@@ -54,7 +44,6 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, 
   margin: 0;
   background: #141414; }
 
-/* line 52, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .wrapper {
   padding: 50px 0;
   position: absolute;
@@ -64,24 +53,20 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, 
   right: 0;
   background: #141414; }
 
-/* line 61, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .content {
   min-height: 100%; }
 
-/* line 65, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 body.opc {
   background: transparent; }
 
 /* Header
  *----------------------------------------------------------------------------- */
-/* line 71, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .header {
   height: 5em;
   background: #1a1a1a;
   padding-left: 5em;
   margin-top: -3em; }
 
-/* line 77, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .consulate_logo {
   padding-top: 1.2em;
   position: absolute;
@@ -89,7 +74,6 @@ body.opc {
 
 /* Main Area
  *----------------------------------------------------------------------------- */
-/* line 85, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .flexcontainer {
   display: -webkit-flex;
   display: flex;
@@ -100,9 +84,7 @@ body.opc {
   background-color: #141414 !important;
   border: none !important;
   margin: 2rem auto;
-  /* this is weird: adding so much space -ct */
-  /* min-height: 900px;  */}
-  /* line 86, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
+  /* min-height: 900px; this is weird: adding so much space -ct */ }
   .flexcontainer.wrap.column {
     -webkit-flex-flow: column wrap;
     flex-flow: column wrap;
@@ -112,11 +94,9 @@ body.opc {
     align-items: center;
     -webkit-justify-content: center;
     justify-content: center; }
-  /* line 95, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
   .flexcontainer.column {
     -webkit-flex-direction: column;
     flex-direction: column; }
-  /* line 108, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
   .flexcontainer > .div {
     height: 14em;
     width: 38em;
@@ -126,12 +106,10 @@ body.opc {
     padding: 1em 1em 1em 1em;
     position: relative; }
 
-/* line 117, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .statusbox {
   padding: 0.4em;
   margin: 0 !important; }
 
-/* line 121, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .detail_button {
   float: right;
   background: #1d1d1d;
@@ -142,7 +120,6 @@ body.opc {
   font-size: 1.1em;
   border: none !important; }
 
-/* line 131, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .detail_buttons {
   float: right;
   padding: 0.8em;
@@ -157,14 +134,12 @@ body.opc {
 
 /* Text Stylings
  *----------------------------------------------------------------------------- */
-/* line 146, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .h1 {
   font-size: 3.5em;
   font-weight: 300;
   font-family: "Open Sans", sans-serif;
   color: #78c114; }
 
-/* line 152, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .opstate {
   color: #f1f1f1 !important;
   font-size: 1.5em;
@@ -172,7 +147,6 @@ body.opc {
   display: inline-block !important;
   margin-top: 0.4em; }
 
-/* line 159, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .status {
   color: #f1f1f1 !important;
   font-size: 1.5em;
@@ -180,54 +154,40 @@ body.opc {
   display: inline-block !important;
   margin-top: 0.75em; }
 
-/* line 166, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .green {
   color: #78c114 !important; }
 
-/* line 169, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .red {
   color: #cb2c11 !important; }
 
-/* line 172, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .yellow {
   color: #ecd90b !important; }
 
-/* line 175, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .status {
   font-size: 1.5em;
   text-transform: uppercase;
   display: inline-block; }
 
-/* line 180, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
-.columnChild > p > a {
-  color: #ffffff !important; }
-
-/* line 184, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .dash_box .h1 {
   margin-top: 0.3em;
   margin-left: 0.1em; }
 
-/* line 188, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .dash_box p {
   margin-left: 0.45em; }
 
-/* line 191, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .statustext {
   display: block;
   line-height: 1em !important;
   margin-top: 1em; }
 
-/* line 196, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .optext {
   display: block; }
 
-/* line 199, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 body > div > div > div:nth-child(9) {
   background: #1d1d1d;
   overflow: hidden;
   position: relative; }
 
-/* line 204, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .add_box a {
   color: #2d2d2d !important;
   text-decoration: none !important;
@@ -238,35 +198,12 @@ body > div > div > div:nth-child(9) {
   left: 50%;
   transform: translate(-50%, -50%); }
 
-/* line 214, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
-.columnChild a {
-  text-decoration: none !important;
-  color: #111111 !important;
-  font-size: 1.5em;
-  font-weight: 300;
-  margin-left: 1em;
-  padding-top: 0.5em !important;
-  width: 100%;
-  position: absolute; }
-
-/* line 224, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
-.columnChild a {
-  text-decoration: none !important;
-  color: #f1f1f1 !important;
-  font-size: 1.2em;
-  font-weight: 500;
-  margin-left: 1em;
-  padding-top: 0.8em;
-  background: #333333 !important;
-  position: absolute; }
-
 /* Flexbox
  *-----------------------------------------------------------------------------
  *
  *  #flexcanvas
  *  width: 100% */
-/* line 240, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
-.rowParent {
+.rowParent, .row-element {
   display: -webkit-box;
   display: -ms-flexbox;
   display: -webkit-flex;
@@ -291,7 +228,6 @@ body > div > div > div:nth-child(9) {
   -ms-flex-align: stretch;
   align-items: stretch; }
 
-/* line 265, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .columnParent {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -321,7 +257,6 @@ body > div > div > div:nth-child(9) {
   -ms-flex-direction: column;
   flex-direction: column; }
 
-/* line 294, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .flexChild {
   -webkit-box-flex: 1;
   -webkit-flex: 1;
@@ -331,37 +266,8 @@ body > div > div > div:nth-child(9) {
   -ms-flex-item-align: auto;
   align-self: auto; }
 
-/* line 303, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
-.column_child {
-  background: #454545 !important;
-  height: 2.8em !important; }
-
-/* line 307, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
-.column_child{
-  -webkit-box-flex: 0;
-  -webkit-flex: 0 0 auto;
-  -ms-flex: 0 0 auto;
-  flex: 0 0 auto;
-  height: 3em;
-  background: #333333;
-  border-top: solid 1px #1d1d1d; }
-
-/* line 316, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
-.rowDownstream, .rowUpstream {
-  -webkit-box-flex: 0;
-  -webkit-flex: 0 0 auto;
-  -ms-flex: 0 0 auto;
-  flex: 0 0 auto;
-  width: 25%;
-  background: #1d1d1d; }
-
-/* line 324, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
-.rowDetailView {
-  padding: 3em; }
-
 /* Footer
  *----------------------------------------------------------------------------- */
-/* line 330, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .footer {
   height: 2em;
   background: #1a1a1a;
@@ -372,13 +278,11 @@ body > div > div > div:nth-child(9) {
 
 /* Operational State Circle Indicator
  *----------------------------------------------------------------------------- */
-/* line 341, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .opc_holder {
   float: right;
   margin-right: 7em;
   margin-top: 0em; }
 
-/* line 346, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .opc {
   position: absolute;
   transform: scale(0.3) translate(-24em, -24em);
@@ -387,27 +291,20 @@ body > div > div > div:nth-child(9) {
   width: 329px;
   height: 329px;
   z-index: 987987; }
-  /* line 355, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
   .opc.down2 .opcsprite {
     left: 0%; }
-  /* line 358, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
   .opc.standby .opcsprite {
     left: -329px; }
-  /* line 361, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
   .opc.test .opcsprite {
     left: -658px; }
-  /* line 364, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
   .opc.down .opcsprite {
     left: -987px; }
-  /* line 367, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
   .opc.up .opcsprite {
     left: -1316px; }
-  /* line 369, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
   .opc .spacer {
     display: block;
     width: 329px;
     height: 329px; }
-  /* line 373, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
   .opc .opcsprite {
     display: block;
     position: absolute;
@@ -415,14 +312,11 @@ body > div > div > div:nth-child(9) {
     left: 0;
     width: 1645px;
     height: 329px; }
-    /* line 381, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
     .opc .opcsprite.s2 {
       left: -329px; }
-    /* line 383, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
     .opc .opcsprite.s3 {
       left: -658px; }
 
-/* line 386, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .opc2 {
   position: absolute;
   transform: scale(0.3);
@@ -430,25 +324,19 @@ body > div > div > div:nth-child(9) {
   visibility: visible;
   width: 100%;
   height: 329px; }
-  /* line 394, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
   .opc2.down2 .opcsprite {
     left: 0%; }
-  /* line 397, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
   .opc2.standby .opcsprite {
     left: -329px; }
-  /* line 400, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
   .opc2.test .opcsprite {
     left: -658px; }
-  /* line 403, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
   .opc2.down .opcsprite {
     left: -987px; }
-  /* line 406, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
   .opc2.up .opcsprite {
     left: -1316px; }
 
 /* Icons
  *----------------------------------------------------------------------------- */
-/* line 412, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
 .icon {
   width: 2em;
   height: 2em; }

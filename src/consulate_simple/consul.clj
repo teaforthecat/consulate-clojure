@@ -94,8 +94,8 @@
   (call client/get (url [:catalog :datacenters])))
 
 (defn get-nodes [& service]
-  (if service
-    (call client/get (url [:catalog :service :nodes] {:service service}))
+  (if service ;;TODO support multiple services
+    (call client/get (url [:catalog :service :nodes] {:service (first service)}))
     (call client/get (url [:catalog :nodes]))))
 
 (defn get-services [& node]
