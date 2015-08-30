@@ -199,7 +199,7 @@ body.opc {
   display: inline-block; }
 
 /* line 180, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
-#columnChild86333 > p > a {
+.columnChild > p > a {
   color: #ffffff !important; }
 
 /* line 184, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
@@ -239,7 +239,7 @@ body > div > div > div:nth-child(9) {
   transform: translate(-50%, -50%); }
 
 /* line 214, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
-#columnChild86333 a {
+.columnChild a {
   text-decoration: none !important;
   color: #111111 !important;
   font-size: 1.5em;
@@ -250,7 +250,7 @@ body > div > div > div:nth-child(9) {
   position: absolute; }
 
 /* line 224, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
-#columnChild13556 a, #columnChild15745 a, #columnChild64505 a, #columnChild57871 a, #columnChild75902 a {
+.columnChild a {
   text-decoration: none !important;
   color: #f1f1f1 !important;
   font-size: 1.2em;
@@ -332,12 +332,12 @@ body > div > div > div:nth-child(9) {
   align-self: auto; }
 
 /* line 303, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
-#columnChild86333 {
+.column_child {
   background: #454545 !important;
   height: 2.8em !important; }
 
 /* line 307, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
-#columnChild13556, #columnChild15745, #columnChild64505, #columnChild57871, #columnChild75902 {
+.column_child{
   -webkit-box-flex: 0;
   -webkit-flex: 0 0 auto;
   -ms-flex: 0 0 auto;
@@ -347,7 +347,7 @@ body > div > div > div:nth-child(9) {
   border-top: solid 1px #1d1d1d; }
 
 /* line 316, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
-#rowDownstream, #rowUpstream {
+.rowDownstream, .rowUpstream {
   -webkit-box-flex: 0;
   -webkit-flex: 0 0 auto;
   -ms-flex: 0 0 auto;
@@ -356,7 +356,7 @@ body > div > div > div:nth-child(9) {
   background: #1d1d1d; }
 
 /* line 324, /Users/cthompson/projects/gitlab/development/consulate-ui/source/stylesheets/opc.sass */
-#rowDetailView {
+.rowDetailView {
   padding: 3em; }
 
 /* Footer

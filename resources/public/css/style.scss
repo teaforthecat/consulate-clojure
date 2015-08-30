@@ -1,46 +1,46 @@
 body {
-	line-height: 1em;
+        line-height: 1em;
 }
 ol, ul {
-	list-style: none;
+        list-style: none;
 }
 blockquote, q {
-	quotes: none;
+        quotes: none;
 }
 blockquote:before, blockquote:after,
 q:before, q:after {
-	content: '';
-	content: none;
+        content: '';
+        content: none;
 }
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
+        border-collapse: collapse;
+        border-spacing: 0;
 }
 /* End of CSS Reset */
 
 article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary {
-	display: block;
+        display: block;
 }
 body {
-	font: 12px/18px Arial, sans-serif;
+        font: 12px/18px Arial, sans-serif;
 }
 .wrapper {
-	min-width: 300px;
-	max-width: 2400px;
-	margin: 0 auto;
-	background: #141414;
+        min-width: 300px;
+        max-width: 2400px;
+        margin: 0 auto;
+        background: #141414;
 }
 
 body.opc {
-	background:transparent;
+        background:transparent;
 }
 
 /* Header
 -----------------------------------------------------------------------------*/
 .header {
-	height: 5em;
-	background: #1a1a1a;
-	padding-left: 5em;
+        height: 5em;
+        background: #1a1a1a;
+        padding-left: 5em;
 }
 
 
@@ -89,8 +89,8 @@ body.opc {
 }
 
 .statusbox {
-	padding: 30px;
-	margin: 0 !important;
+        padding: 30px;
+        margin: 0 !important;
 }
 
 
@@ -99,9 +99,9 @@ body.opc {
 /* Text Stylings
 -----------------------------------------------------------------------------*/
 h1 { font-size: 3.5em;
-	font-weight: 300;
-	font-family: 'Open Sans', sans-serif;
-	color: #78c114;
+        font-weight: 300;
+        font-family: 'Open Sans', sans-serif;
+        color: #78c114;
 }
 
 h2, h3, h4, h5 {
@@ -110,26 +110,26 @@ h2, h3, h4, h5 {
 
 
 .opstate {
-	color: #f1f1f1 !important;
-	font-size: 1.5em;
-	text-transform: uppercase;
-	display:inline-block !important;
-	margin-top: .4em;
+        color: #f1f1f1 !important;
+        font-size: 1.5em;
+        text-transform: uppercase;
+        display:inline-block !important;
+        margin-top: .4em;
 }
 
 .status {
-	color: #f1f1f1 !important;
-	font-size: 1.5em;
-	text-transform: uppercase;
-	display:inline-block !important;
-	margin-top: 1.2em;
+        color: #f1f1f1 !important;
+        font-size: 1.5em;
+        text-transform: uppercase;
+        display:inline-block !important;
+        margin-top: 1.2em;
 }
 
 .statusgreen {
-	font-size: 1.5em;
-	text-transform: uppercase;
-	color: #78c114;
-	display: inline-block;
+        font-size: 1.5em;
+        text-transform: uppercase;
+        color: #78c114;
+        display: inline-block;
 
 }
 
@@ -140,31 +140,31 @@ h2, h3, h4, h5 {
 -----------------------------------------------------------------------------*/
 
 .opc {
-	position: relative;
-	overflow: hidden;
-	width: 200px;
-	height: 200px;
+        position: relative;
+        overflow: hidden;
+        width: 200px;
+        height: 200px;
 
-  	&.spacer {
-    	display: block;
-    	width: 100%;
-    	height: auto;
-  	}
-  	&.opcsprite {
-  		display: block;
+        &.spacer {
+        display: block;
+        width: 100%;
+        height: auto;
+        }
+        &.opcsprite {
+                display: block;
         position: absolute;
         top: 0;
         left: 0;
         max-width: none;
         height: 100%;
-        
+
         &.s1
         { }
         &.s2
-        {  left: -100%;  
+        {  left: -100%;
         }
         &.s3
-        {  left: -200%;  
+        {  left: -200%;
         }
     }
 }
@@ -174,8 +174,8 @@ h2, h3, h4, h5 {
 /* Footer
 -----------------------------------------------------------------------------*/
 .footer {
-	height: 2em;
-	background: #1a1a1a;
-	color: #cccccc;
-	padding-left: 2em;
+        height: 2em;
+        background: #1a1a1a;
+        color: #cccccc;
+        padding-left: 2em;
 }
