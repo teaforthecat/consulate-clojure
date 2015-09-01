@@ -26,7 +26,7 @@
   (:import goog.History))
 
 (defn page []
-  [(pages (or (session/get :page) :not-found)) app-state])
+  [(pages (or (session/get :page) :not-found)) app-db])
 
 ;; -------------------------
 ;; Routes
@@ -72,12 +72,12 @@
 
 ;; TODO do this next
 (defn mount-root []
-  (reagent/render [views/main-panel]
+  (reagent/render [page]
                   (.getElementById js/document "app")))
 
 (defn init! []
   (consulate-simple.config/get-config)
-  (routes/app-routes)
+  ;(routes/app-routes)
   (secretary/dispatch! (.-hash js/window.location))
-  (re-frame/dispatch-sync [:initialize-db])
+  (dispatch-sync [:initialize-db])
   (mount-root))

@@ -1,4 +1,4 @@
-(ns  consulate-simple.handlers
+(ns consulate-simple.handlers
   (:require [consulate-simple.consul :as consul]
             [consulate-simple.db :as db]
             [reagent.session :as session]
@@ -21,11 +21,10 @@
 
 
 (register-handler
- :set-page
+ :navigate
  (fn [app-db [_ name & args]]
+   (session/put! :page name)))
 
-
-   (session/put! :page :datacenters)))
 
 ;; -------------------------
 ;; Handlers

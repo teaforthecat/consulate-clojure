@@ -48,7 +48,9 @@ To start a web server for the application, run:
 
     lein ring server
 
+## Testing
 
+    lein doo phantom test
 
 
 [1]: https://github.com/technomancy/leiningen
