@@ -5,6 +5,7 @@
     ;; [consulate-simple.routes :refer (path-for)]
     ;; [com.rpl.specter :as s]
     ;; [consulate-simple.db :as db]
+    [re-frame.core :refer [subscribe dispatch]]
     [cljs-http.client :as http]
     [cljs.core.async :refer [<! take!]]
     [ajax.core :refer [GET PUT POST]]))
@@ -20,17 +21,18 @@
 (defn datacenter [name]
   (map->Datacenter {:name name :op_state "active" :health_status "Healthy"}))
 
-(defn get-datacenters [app-state]
+(defn get-datacenters []
   "coerces list of datacenter names from the server into Datacenter records, and updates APP-STATE"
   (GET datacenters-path
-      :handler #(swap! app-state update-in [:datacenters] (fn [] (map datacenter %)))
+      ;; :handler #(swap! app-state update-in [:datacenters] (fn [] (map datacenter %)))
+      :handler #(dispatch [:datacenters-arrived %])
       ))
 
 (defn get-datacenters-async []
   (http/get datacenters-path))
 
 (defn get-datacenter-detail [name app-state]
-  (if-not (:datacenters app-state) (get-datacenters app-state))
+  (if-not (:datacenters app-state) (get-datacenters))
   (swap! app-state assoc-in [:detail] (datacenter name)))
 
 (defn put-kv [key value]
@@ -56,8 +58,8 @@
 
 
 (defn get-detail [app-state]
-  (get-datacenters app-state))
+  (get-datacenters))
 
 
 (defn initialize-data [app-state]
-  (get-datacenters app-state))
+  (get-datacenters))

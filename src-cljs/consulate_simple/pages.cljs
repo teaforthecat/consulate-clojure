@@ -6,6 +6,7 @@
             [consulate-simple.consul :as consul]
             [reagent.session :as session]
             [reagent-forms.core :refer [bind-fields]]
+            [re-frame.core :refer [subscribe]]
             [markdown.core :refer [md->html]]))
 
 
@@ -28,10 +29,11 @@
                       {:__html (md->html docs)}}]]])])
 
 (defn datacenters-page [doc]
-  [:div.wrapper
-   [p/header]
-   (into [:div.flexcontainer.wrap.column] ;;todo allow a "datacenters" div in css to contain them
-         (map p/datacenter (:datacenters @doc)))])
+  (let [datacenters (subscribe [:datacenters])]
+    [:div.wrapper
+     [p/header]
+     (into [:div.flexcontainer.wrap.column] ;;todo allow a "datacenters" div in css to contain them
+           (map p/datacenter @datacenters))]))
 
 (defn field-row [label input]
   [:div.row
