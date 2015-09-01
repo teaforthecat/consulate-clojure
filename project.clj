@@ -21,6 +21,7 @@
                  [org.clojure/clojurescript "0.0-3308" :scope "provided"]
                  [org.clojure/tools.reader "0.9.2"]
                  [reagent "0.5.0"]
+                 [re-frame "0.4.1"]
                  [cljsjs/react "0.13.3-0"]
                  [reagent-forms "0.5.1"]
                  [reagent-utils "0.1.4"]
@@ -49,7 +50,8 @@
   :plugins [[lein-ring "0.9.1"]
             [lein-environ "1.0.0"]
             [lein-ancient "0.6.5"]
-            [lein-cljsbuild "1.0.6"]]
+            [lein-cljsbuild "1.0.6"]
+            [lein-doo "0.1.5-SNAPSHOT"]]
 
 
 
@@ -70,7 +72,12 @@
       :optimizations :none
       :output-to "resources/public/js/app.js"
       :warnings {:single-segment-namespace false}
-      :pretty-print true}}}}
+      :pretty-print true}}
+    :test {:source-paths ["src-cljs" "test/cljs"]
+           :compiler
+           {:output-to "resources/public/js/testable.js"
+            :main 'consulate-simple.runner
+            :optimizations :none}}}}
 
 
   :profiles
