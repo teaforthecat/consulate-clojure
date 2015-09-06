@@ -4,6 +4,7 @@
   :url "http://example.com/FIXME"
 
   :dependencies [[org.clojure/clojure "1.7.0"]
+                 [org.clojure/clojurescript "1.7.48"]
                  [selmer "0.8.2"]
                  [com.taoensso/timbre "3.4.0"]
                  [com.taoensso/tower "3.0.2"]
@@ -18,7 +19,6 @@
                  [prone "0.8.2"]
                  [org.clojure/tools.nrepl "0.2.10"]
                  [ring-server "0.4.0"]
-                 [org.clojure/clojurescript "0.0-3308" :scope "provided"]
                  [org.clojure/tools.reader "0.9.2"]
                  [reagent "0.5.0"]
                  [re-frame "0.4.1"]
