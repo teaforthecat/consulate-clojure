@@ -76,7 +76,7 @@
     :test {:source-paths ["src-cljs" "test/cljs"]
            :compiler
            {:output-to "resources/public/js/testable.js"
-            :main 'consulate-simple.runner
+            :main "consulate-simple.runner"
             :optimizations :none}}}}
 
 
@@ -95,6 +95,7 @@
    :project/dev {:dependencies [[ring-mock "0.1.5"]
                                 [ring/ring-devel "1.3.2"]
                                 [pjstadig/humane-test-output "0.7.0"]
+                                [lein-doo "0.1.5-SNAPSHOT"]
                                 [lein-figwheel "0.3.3"]
                                 [org.clojure/tools.nrepl "0.2.10"]]
                  :plugins [[lein-figwheel "0.3.3"]]
