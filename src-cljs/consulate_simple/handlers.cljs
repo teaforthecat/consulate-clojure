@@ -6,7 +6,7 @@
 
 
 (register-handler
- :initialise-db
+ :initialize-db
  debug
  (fn [_ _]
    (consul/get-datacenters) ;; async

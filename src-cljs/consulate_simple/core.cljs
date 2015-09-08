@@ -26,7 +26,7 @@
   (:import goog.History))
 
 (defn page []
-  [(pages (or (session/get :page) :not-found)) app-db])
+  [(pages (or (session/get :page) :not-found))])
 
 ;; -------------------------
 ;; Routes
@@ -80,4 +80,4 @@
   ;(routes/app-routes)
   (secretary/dispatch! (.-hash js/window.location))
   (dispatch-sync [:initialize-db])
-  (mount-root))
+  (mount-components))

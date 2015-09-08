@@ -28,7 +28,7 @@
                [:div {:dangerouslySetInnerHTML
                       {:__html (md->html docs)}}]]])])
 
-(defn datacenters-page [doc]
+(defn datacenters-page []
   (let [datacenters (subscribe [:datacenters])]
     [:div.wrapper
      [p/header]
@@ -153,5 +153,5 @@
   {:home #'home-page
    :about #'about-page
    :not-found #'not-found
-   :datacenters #'datacenters-page
+   :consul #'datacenters-page
    :detail  #'detail-page})
