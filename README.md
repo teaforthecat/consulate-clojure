@@ -16,7 +16,7 @@ For development, `resources/public/config.edn` with this content:
 You will need [Leiningen][1] 2.0 or above installed.
 
 
-### Development
+## Development
 
     lein figwheel
 
@@ -26,8 +26,14 @@ Connect to the webserver on port 3449
 
 Connect to the nrpel server on port 7002
 
-### Emacs
+Optionally switch to the 'test' build
 
+    cljs.user=> (switch-to-build 'test)
+
+
+## REPL
+
+### Emacs
 
 ```
 M-x cider-connect
@@ -39,8 +45,6 @@ Then in the user namespace you can connect to the cljs-repl
 ```clojure
 user> (cljs-repl)
 ```
-
-
 
 ## Running
 

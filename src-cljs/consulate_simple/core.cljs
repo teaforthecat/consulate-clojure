@@ -19,30 +19,28 @@
             [consulate-simple.consul :as consul]
             [consulate-simple.handlers]
             [consulate-simple.subs]
-            [consulate-simple.partials :refer [navbar]]
-            [consulate-simple.pages :refer [pages]]
-            ;; [consulate-simple.db :as db]
+            [consulate-simple.pages :refer [current_page navbar]]
             [ajax.core :refer [GET POST]])
   (:import goog.History))
 
-(defn page []
-  [(pages (or (session/get :page) :not-found))])
+;; (defn page []
+;;   [(pages (or (session/get :page) :not-found))])
 
 ;; -------------------------
 ;; Routes
 (secretary/set-config! :prefix "#")
 
 (secretary/defroute "/" []
-  (session/put! :page :home))
+  (dispatch-sync [:navigate :home]))
 
 (secretary/defroute "/about" []
-  (session/put! :page :about))
+  (dispatch-sync [:navigate :about]))
 
-(secretary/defroute "/consul" []
-  (dispatch-sync [:navigate :consul]))
+(secretary/defroute "/consul" [query-params]
+  (dispatch-sync [:navigate :consul query-params]))
 
 (secretary/defroute "/consul/datacenters/:name" [name]
-  (dispatch-sync [:navigate :detail name]))
+  (dispatch-sync [:navigate :detail {:name name}]))
 
 ;; -------------------------
 ;; History
@@ -58,26 +56,12 @@
 ;; use var refs for reloadability
 (defn mount-components []
   (reagent/render-component [#'navbar] (.getElementById js/document "navbar"))
-  (reagent/render-component [#'page] (.getElementById js/document "app")))
-
-
-
-
-;; (defn init! []
-;;   (consulate-simple.config/get-config)
-;;   (hook-browser-navigation!)
-;;   (secretary/dispatch! (.-hash js/window.location))
-;;   (dispatch-sync [:initialise-db])
-;;   (mount-components))
-
-;; TODO do this next
-(defn mount-root []
-  (reagent/render [page]
-                  (.getElementById js/document "app")))
+  (reagent/render-component [#'current_page] (.getElementById js/document "app")))
 
 (defn init! []
   (consulate-simple.config/get-config)
-  ;(routes/app-routes)
-  (secretary/dispatch! (.-hash js/window.location))
+  (hook-browser-navigation!)
   (dispatch-sync [:initialize-db])
+  ;(routes/app-routes)
+  ;; (secretary/dispatch! (.-hash js/window.location))
   (mount-components))

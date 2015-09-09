@@ -23,19 +23,6 @@
          :title "&amp;lt; Back to Dashboard"
          :width "300em"}])
 
-(defn navbar []
-  [:div.navbar.navbar-inverse.navbar-fixed-top
-   [:div.container
-    [:div.navbar-header
-     [:a.navbar-brand {:href "#/"} "myapp"]]
-    [:div.navbar-collapse.collapse
-     [:ul.nav.navbar-nav
-      [:li {:class (when (= :home (session/get :page)) "active")}
-       [:a {:href "#/"} "Home"]]
-      [:li {:class (when (= :about (session/get :page)) "active")}
-       [:a {:href "#/about"} "About"]]
-      [:li {:class (when (= :datacenters (session/get :page)) "active")}
-       [:a {:href "#/consul"} "Consul"]]]]]])
 
 
 (def image-spacer

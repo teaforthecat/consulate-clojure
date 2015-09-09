@@ -8,9 +8,9 @@
 (register-handler
  :initialize-db
  debug
- (fn [_ _]
+ (fn [app-db _]
    (consul/get-datacenters) ;; async
-   db/default-value))
+   (merge db/default-value app-db)))
 
 (register-handler
  :datacenters-arrived
@@ -22,8 +22,9 @@
 
 (register-handler
  :navigate
- (fn [app-db [_ name & args]]
-   (session/put! :page name)))
+ debug
+ (fn [app-db [_ page query-params]]
+   (assoc-in app-db [:navigation] {:page page :args query-params})))
 
 
 ;; -------------------------

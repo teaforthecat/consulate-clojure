@@ -9,6 +9,23 @@
             [re-frame.core :refer [subscribe]]
             [markdown.core :refer [md->html]]))
 
+;; this can be treated like a page I guess
+(defn navbar []
+  (let [navigation (subscribe [:navigation])
+        active_page (:page @navigation)]
+    [:div.navbar.navbar-inverse.navbar-fixed-top
+     [:div.container
+      [:div.navbar-header
+       [:a.navbar-brand {:href "#/"} "myapp"]]
+      [:div.navbar-collapse.collapse
+       [:ul.nav.navbar-nav
+        [:li {:class (when (= :home active_page) "active")}
+         [:a {:href "#/"} "Home"]]
+        [:li {:class (when (= :about active_page) "active")}
+         [:a {:href "#/about"} "About"]]
+        [:li {:class (when (= :consul active_page) "active")}
+         [:a {:href "#/consul"} "Consul"]]]]]]))
+
 
 (defn about-page [doc]
   [:div "this is the story of consulate-simple... work in progress"])
@@ -42,7 +59,9 @@
 
 (defn add-parent [key value]
   (let [new-parent {:id key :title value :link "wut"}]
-    (swap! consulate-simple.core/app-state update-in [:detail :parents] conj new-parent)))
+                                        ;  (swap! consulate-simple.core/app-state update-in [:detail :parents] conj new-parent)
+
+  ))
 
 (defn get-consul-kv [key & options]
   (go
@@ -149,9 +168,15 @@
 (defn not-found [doc]
   [:div "404 Not found"])
 
+;; use var refs for reloadability
 (def pages
   {:home #'home-page
    :about #'about-page
    :not-found #'not-found
    :consul #'datacenters-page
    :detail  #'detail-page})
+
+(defn current_page []
+  "finds the function for a :page and puts it in a hiccup vector to be called reactively"
+  (let [navigation (subscribe [:navigation])]
+    [(pages (or (:page @navigation) :not-found))]))
