@@ -4,27 +4,27 @@
             [reagent.session :as session]
             [re-frame.core :refer [register-handler debug path]]))
 
+;; inspect the state with
+;; re-frame.db/app-db
 
 (register-handler
  :initialize-db
- debug
  (fn [app-db _]
    (consul/get-datacenters) ;; async
    (merge db/default-value app-db)))
 
 (register-handler
  :datacenters-arrived
- [ debug
-  (path :datacenters) ]
+ [(path :datacenters) ]
  (fn [app-db [_ response]]
    (map consul/datacenter response)))
 
 
 (register-handler
  :navigate
- debug
+ [(path :navigation)]
  (fn [app-db [_ page query-params]]
-   (assoc-in app-db [:navigation] {:page page :args query-params})))
+   {:page page :args query-params}))
 
 
 ;; -------------------------

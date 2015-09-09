@@ -23,8 +23,6 @@
             [ajax.core :refer [GET POST]])
   (:import goog.History))
 
-;; (defn page []
-;;   [(pages (or (session/get :page) :not-found))])
 
 ;; -------------------------
 ;; Routes
