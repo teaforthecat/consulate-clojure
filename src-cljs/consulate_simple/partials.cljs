@@ -1,5 +1,7 @@
 (ns consulate-simple.partials
   (:require [consulate-simple.config :refer (config)]
+            [re-frame.core :refer [subscribe]]
+            [reagent.core :refer [atom]]
             [reagent.session :as session]))
 
 (def color-states {"Failing" "red"
@@ -15,7 +17,6 @@
                          "standby" "up"
                          "test" "test"})
 
-
 (defn image-header-logo []
   [:img {:alt "Consulate Dashboard Logo"
          :border "0"
@@ -23,14 +24,11 @@
          :title "&amp;lt; Back to Dashboard"
          :width "300em"}])
 
-
-
 (def image-spacer
   [:img.spacer {:src "img/spacer.png"}])
 
 (def image-opcsprite
   [:img.opcsprite {:src "img/opstate.png"}])
-
 
 (defn status-text [text color]
   [:div.statustext
@@ -67,18 +65,26 @@
       [opstate-text otx op_color]
       [detail-buttons]]]))
 
-
 (defn header []
   [:div.header
     [:div.consulate_logo
      [:a {:href (:root-path config)}
       (image-header-logo)]]])
 
+(defn flash []
+  (let [{:keys [state message]} @(subscribe [:flash])]
+    [:div.flash {:class state} message ]))
 
-(defn row-parent [{:keys [id title link]}]
-  [:div.flexChild {:id id :key id}
-   [:p.titles
-    [:a {:href link} title]]])
+(defn row-parent [{:keys [id title link key value]}]
+  (let [id (str "123" (clojure.string/join "" (take 4 (repeatedly #(rand-nth "123")))))
+        ;toggler (atom "hide")
+        ]
+    [:div.flexChild {:id id :key id}
+     [:p.titles
+      [:span ;{:on-click #(reset! toggler (fn [t] (if (= t "hide") "show" "hide")))}
+       title]
+      [:div.parent-value {:class "hide"}
+       value]]]))
 
 (defn related-element [{:keys [title link]}]
   [:div.flexChild {:class "related-element"}

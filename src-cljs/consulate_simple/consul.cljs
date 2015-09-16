@@ -17,6 +17,7 @@
 (def service-nodes-path (str (:root-path config) "api/catalog/service/"))
 
 (defrecord Datacenter [name op_state status])
+(defrecord Parent [id title link key value])
 
 (defn datacenter [name]
   (map->Datacenter {:name name :op_state "active" :health_status "Healthy"}))
@@ -24,8 +25,7 @@
 (defn get-datacenters []
   "coerces list of datacenter names from the server into Datacenter records, and updates APP-STATE"
   (GET datacenters-path
-      ;; :handler #(swap! app-state update-in [:datacenters] (fn [] (map datacenter %)))
-      :handler #(dispatch [:datacenters-arrived %])
+      :handler #(dispatch [:datacenters %])
       ))
 
 (defn get-datacenters-async []
@@ -38,9 +38,9 @@
 (defn put-kv [key value]
   (http/put (str kv-path "/" key) {:edn-params value}))
 
-
 (defn get-kv [key & options]
-  (http/get (str kv-path "/" key) {:edn-params options}))
+  (let [moptions (apply hash-map options)]
+    (http/get (str kv-path "/" key) {:query-params moptions})))
 
 (defn get-services []
   (http/get services-path))

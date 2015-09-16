@@ -15,8 +15,15 @@
 
 (deftest can-navigate-to-consul
   (is (= null
-         (dispatch-sync [:initialise-db]))))
+         (dispatch-sync [:initialize-db]))))
 
+(deftest can-navigate-to-datacenter-by-name
+  (let [current_path (.-hash js/window.location)
+        name "dc1"]
+    (dispatch-sync [:navigate :detail {:name name}])
+    (is (= current_path (.-hash js/window.location)))
+    ;; (is (= current_path "wut"))
+    ))
 
 ;; (deftest test-async
 ;;   (async done

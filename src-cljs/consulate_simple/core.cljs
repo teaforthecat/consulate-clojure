@@ -38,6 +38,7 @@
   (dispatch-sync [:navigate :consul query-params]))
 
 (secretary/defroute "/consul/datacenters/:name" [name]
+  (dispatch [:get-kv-data name])
   (dispatch-sync [:navigate :detail {:name name}]))
 
 ;; -------------------------
@@ -60,6 +61,7 @@
   (consulate-simple.config/get-config)
   (hook-browser-navigation!)
   (dispatch-sync [:initialize-db])
+  (dispatch [:init-new-service-form])
   ;(routes/app-routes)
   ;; (secretary/dispatch! (.-hash js/window.location))
   (mount-components))

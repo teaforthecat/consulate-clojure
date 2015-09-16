@@ -23,29 +23,47 @@
 (defn coerce-body [req]
   "special http-kit treatment - bytes"
   (let [body (:body req)]
-    (bs/convert body String)))
+    (if (string? body)
+      body
+      (bs/convert body String))))
+                                                          ;; (let [result (cond
+                                                          ;;                recurse
+                                                          ;;                (consul/get-kv-list key)
+                                                          ;;                keys
+                                                          ;;                (consul/get-kv-keys key)
+                                                          ;;                :else
+                                                          ;;                (consul/get-kv key))]
+
+(defn make-key [scope item glob]
+  (clojure.string/join "/" (filter string? [scope item glob])))
 
 (defroutes api-routes
   (context "/api" []
     (context "/kv" []
-      (GET ["/:key" :key #"[a-z/]+"] [key recurse] (try
-                                                     (let [result (if recurse
-                                                                    (consul/get-kv-list key)
-                                                                    (consul/get-kv key))]
-                                                       (ok result))
-                                                     (catch ExceptionInfo e ;; proxy error handling
-                                                       (let [consul-response (.getData e)]
-                                                         (if (= 404 (:status consul-response))
-                                                           (let [message (str "key not found: " key)]
-                                                             (timbre/info message)
-                                                             (not-found message))
-                                                           (let [message (str "received: " (:status consul-response) " " (:body consul-response))]
-                                                             (timbre/error message)
-                                                             (bad-gateway message))))))) ;; get-kv
-      (PUT ["/:key" :key #"[a-z/]+"] [key] (fn [req]
-                           (let [value (coerce-body req)]
+      (GET ["/*"] [scope recurse keys] (fn [req] (try
+                                                   (let [consul-key (get-in req [:route-params :*])
+                                                         result (cond
+                                                                  recurse
+                                                                  (consul/get-kv-list consul-key)
+                                                                  keys
+                                                                  (consul/get-kv-keys consul-key)
+                                                                  :else
+                                                                  (consul/get-kv consul-key))]
+                                                     (ok result))
+                                                   (catch ExceptionInfo e ;; proxy error handling
+                                                     (let [consul-response (.getData e)]
+                                                       (if (= 404 (:status consul-response))
+                                                         (let [message (str "key not found: " (get-in req [:route-params :*]))]
+                                                           (timbre/info message)
+                                                           (not-found message))
+                                                         (let [message (str "received: " (:status consul-response) " " (:body consul-response))]
+                                                           (timbre/error message)
+                                                           (bad-gateway message)))))))) ;; get-kv
+      (PUT ["/*"] [scope] (fn [req]
+                            (let [consul-key (get-in req [:route-params :*])
+                                  value (coerce-body req)]
                              ;; stored as a string
-                             (consul/put-kv key value)
+                             (consul/put-kv consul-key value)
                              (ok "success\n"))))) ;; put-kv
     (context "/catalog" []
       (GET "/datacenters" [] (ok (consul/get-datacenters)))  ; get-datacenters

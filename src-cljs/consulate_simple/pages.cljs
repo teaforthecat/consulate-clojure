@@ -6,31 +6,40 @@
             [consulate-simple.consul :as consul]
             [reagent.session :as session]
             [reagent-forms.core :refer [bind-fields]]
-            [re-frame.core :refer [subscribe]]
+            [reagent.core :as reagent]
+            [re-frame.core :refer [subscribe dispatch dispatch-sync]]
             [markdown.core :refer [md->html]]))
+
+;; TODO consider move to app-db
+(def nav-links {:home {:path "#/" :label "Home"}
+                :about {:path "#/about" :label "About"}
+                :consul {:path "#/consul" :label "Consul"}})
+
+
+(defn nav-link [[name route]]
+  [:li {:class (when (:active route) "active")}
+   [:a {:href (:path route)} (:label route)]])
 
 ;; this can be treated like a page I guess
 (defn navbar []
   (let [navigation (subscribe [:navigation])
-        active_page (:page @navigation)]
+        active_page (:page @navigation)
+        nav-links-with-active (assoc-in nav-links [active_page :active] true)]
     [:div.navbar.navbar-inverse.navbar-fixed-top
      [:div.container
       [:div.navbar-header
        [:a.navbar-brand {:href "#/"} "myapp"]]
       [:div.navbar-collapse.collapse
-       [:ul.nav.navbar-nav
-        [:li {:class (when (= :home active_page) "active")}
-         [:a {:href "#/"} "Home"]]
-        [:li {:class (when (= :about active_page) "active")}
-         [:a {:href "#/about"} "About"]]
-        [:li {:class (when (= :consul active_page) "active")}
-         [:a {:href "#/consul"} "Consul"]]]]]]))
+       (into [:ul.nav.navbar-nav]
+             (map nav-link nav-links-with-active))]]]))
 
+(defn not-found []
+  [:div "404 Not found"])
 
-(defn about-page [doc]
+(defn about-page []
   [:div "this is the story of consulate-simple... work in progress"])
 
-(defn home-page [doc]
+(defn home-page []
   [:div.container
    [:div.jumbotron
     [:h1 "Welcome to consulate-simple"]
@@ -87,26 +96,50 @@
         (swap! doc dissoc :new-service-form))
       (swap! doc update-in [:flash :error] "There was an error"))))
 
-(defn new-service-form []
-  (fn [doc]
-    (let [add-form-button [:button
-                            {:on-click #(swap! doc assoc :new-service-form {})}
-                            "Parents / Upstream (+)"]
-           the-form [:div.form {:id :new-service-form}
-                      [bind-fields
-                        [:div
-                          [:label "Key"]
-                          [:input {:field :text :id :new-service-form.consul-key}]
-                          [:label "Value"]
-                          [:input {:field :text :id :new-service-form.consul-value}]
-                          ]
-                        doc]
-                      [:button {:id :new-service-form.submit
-                                 :on-click #(new-service-form-handler doc %)} "submit"]]]
+;; (defn render-new-service-form []
+;;   (fn [doc]
+;;     (let [add-form-button [:button
+;;                             {:on-click #(swap! doc assoc :new-service-form {})}
+;;                             "Parents / Upstream (+)"]
+;;            the-form [:div.form {:id :new-service-form}
+;;                       [bind-fields
+;;                         [:div
+;;                           [:label "Key"]
+;;                           [:input {:field :text :id :new-service-form.consul-key}]
+;;                           [:label "Value"]
+;;                           [:input {:field :text :id :new-service-form.consul-value}]
+;;                           ]
+;;                         doc]
+;;                       [:button {:id :new-service-form.submit
+;;                                  :on-click #(new-service-form-handler doc %)} "submit"]]]
 
-      (if (contains? @doc :new-service-form)
-        the-form
-        add-form-button))))
+;;       (if (contains? @doc :new-service-form)
+;;         the-form
+;;         add-form-button))))
+
+;; form should be a ratom
+(defn render-new-service-form [form]
+  [:div.form {:id :new-service-form}
+;   [:div.errors (get-in @form [:new-service-form :errors])]
+   [bind-fields
+    [:div
+     [:label "Key"]
+     [:input {:field :text :id :new-service-form.consul-key}]
+     [:label "Value"]
+     [:input {:field :text :id :new-service-form.consul-value}]]
+    form]
+   [:button {:id :new-service-form.submit
+             :on-click #(dispatch [:submit-new-service-form @form])} "submit"]])
+
+(defn render-add-form-button []
+  [:button {:on-click #(dispatch [:add-new-service-form])}
+   "Parents / Upstream (+)"])
+
+(defn new-service-form []
+  (let [form (subscribe [:new-service-form])]
+    (if (and form (:active @form))
+      (render-new-service-form (reagent/atom @form)) ;;the reaction from re-frame won't work
+      (render-add-form-button))))
 
 (defn expand-child [event child-name doc]
   (println "expanding-child")
@@ -117,56 +150,47 @@
     (let [{status :status nodes :body} (<! (consul/get-service-nodes child-name))]
       (swap! doc update-in [:detail :children :expanded] nodes))))
 
-;; (defn new-service-form []
-;;   (fn [doc]
-;;     [:div [:p [:a "hello"]]]))
+(defn render-detail-page [detail]
+  [:div.wrapper
+   [p/header]
+   [p/flash]
+   [:div.content.flexChild.rowParent
+    [:div.flexChild {:id "rowUpstream"}
+     [new-service-form]
+     (map p/row-parent (:parents detail []))
+     ]
+    [:div.flexChild {:id "rowDetailView"}
+     [:div.dash_box
+      [:div.opc_holder
+       [:div.span.opc {:class "up"}
+        p/image-spacer
+        p/image-opcsprite]]
+      [:div.h1 {:class "green"} (:name detail)]
+      (p/status-text "Healthy" "green")
+      (p/opstate-text "Running" "green")
+      (p/detail-buttons)]]
+    [into [:div.flexChild {:class "rowDownstream"}]
+     (map (fn [child]
+            (let [child_name (first child)]
+              [:div.flexChild {:class "columnChild"}
+               [:p.titles
+                [:a {:href "javascript: void(0);"
+                     :onclick #(dispatch [:expand-child %]) ;(fn [event] (expand-child event child_name doc) )
+                     }
+                 (name child_name)]]
+               ]))
+          (:children detail))]]])
 
-(defn detail-page [doc]
-  (let [detail (:detail @doc)]
-    [:div.wrapper
-     [p/header]
-     [:div.content.flexChild.rowParent
+(defn detail-page []
+  (let [navigation (subscribe [:navigation])
+        datacenters (subscribe [:datacenters])
+        name (get-in @navigation [:args :name])
+        detail (first (filter #(= name (:name %)) @datacenters))]
+    (if-not (nil? detail)
+      (do
+        (render-detail-page detail))
+      (not-found))))
 
-      [:div.flexChild {:id "rowUpstream"}
-       (map p/row-parent (:parents detail []) )
-       [:div.flexChild {:id "columnChild75902"}
-         [:p.titles
-           [new-service-form doc]]]]
-
-
-      [:div.flexChild {:id "rowDetailView"}
-       [:div.dash_box
-        [:div.opc_holder
-         [:div.span.opc {:class "up"}
-          p/image-spacer
-          p/image-opcsprite]]
-        [:div.h1 {:class "green"} (:name detail)]
-        (p/status-text "Healthy" "green")
-        (p/opstate-text "Running" "green")
-        (p/detail-buttons)]]
-
-      [into [:div.flexChild {:class "rowDownstream"}]
-       (map (fn [child]
-              (let [child_name (first child)]
-                [:div.flexChild {:class "columnChild"}
-                 [:p.titles
-                  [:a {:href "javascript: void(0);"
-                       :onclick (fn [event] (expand-child event child_name doc) )
-                       }
-                   (name child_name)]]
-                 ]))
-            (:children detail))]
-      ;; [into [:div.flexChild {:class "rowDownstream"} ]
-      ;;  (map
-      ;;   (fn [{:keys [node address serviceport]}]
-      ;;     [:div.flexchild.expanded node])
-
-      ;;   (get-in detail [:children :expanded]))]
-
-      ]]))
-
-(defn not-found [doc]
-  [:div "404 Not found"])
 
 ;; use var refs for reloadability
 (def pages
