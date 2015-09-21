@@ -15,6 +15,11 @@
    (reaction (:datacenters @db))))
 
 (register-sub
+ :detail
+ (fn [db]
+   (reaction (:detail @db))))
+
+(register-sub
  :new-service-form
  (fn [db]
    (reaction (:new-service-form @db))))

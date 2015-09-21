@@ -61,61 +61,61 @@
      (into [:div.flexcontainer.wrap.column] ;;todo allow a "datacenters" div in css to contain them
            (map p/datacenter @datacenters))]))
 
-(defn field-row [label input]
-  [:div.row
-    [:div.col-md-2 [:label label]]
-    [:div.col-md-5 input]])
+;; (defn field-row [label input]
+;;   [:div.row
+;;     [:div.col-md-2 [:label label]]
+;;     [:div.col-md-5 input]])
 
-(defn add-parent [key value]
-  (let [new-parent {:id key :title value :link "wut"}]
-                                        ;  (swap! consulate-simple.core/app-state update-in [:detail :parents] conj new-parent)
+;; (defn add-parent [key value]
+;;   (let [new-parent {:id key :title value :link "wut"}]
+;;                                         ;  (swap! consulate-simple.core/app-state update-in [:detail :parents] conj new-parent)
 
-  ))
+;;   ))
 
-(defn get-consul-kv [key & options]
-  (go
-      (prn options)
-    (let [response (<! (consul/get-kv key options))]
-      (prn (:status response))
-      (prn (:body response)))))
+;; (defn get-consul-kv [key & options]
+;;   (go
+;;       (prn options)
+;;     (let [response (<! (consul/get-kv key options))]
+;;       (prn (:status response))
+;;       (prn (:body response)))))
 
-(defn send-consul-kv [key value]
-  (go
-    (let [response (<! (consul/put-kv key value))]
-      (prn (:status response))
-      (prn (:body response))
-      (if (= 200 (:status response))
-        (add-parent key value)))))
+;; (defn send-consul-kv [key value]
+;;   (go
+;;     (let [response (<! (consul/put-kv key value))]
+;;       (prn (:status response))
+;;       (prn (:body response))
+;;       (if (= 200 (:status response))
+;;         (add-parent key value)))))
 
-(defn new-service-form-handler [doc event]
-  (let [{:keys [consul-key consul-value] :as new-service} (:new-service-form @doc)
-         result (send-consul-kv consul-key consul-value)]
-    (if result
-      (do
-        (swap! doc assoc-in [:flash :success] "Key Successfully Saved")
-        (swap! doc dissoc :new-service-form))
-      (swap! doc update-in [:flash :error] "There was an error"))))
+;; (defn new-service-form-handler [doc event]
+;;   (let [{:keys [consul-key consul-value] :as new-service} (:new-service-form @doc)
+;;          result (send-consul-kv consul-key consul-value)]
+;;     (if result
+;;       (do
+;;         (swap! doc assoc-in [:flash :success] "Key Successfully Saved")
+;;         (swap! doc dissoc :new-service-form))
+;;       (swap! doc update-in [:flash :error] "There was an error"))))
 
-;; (defn render-new-service-form []
-;;   (fn [doc]
-;;     (let [add-form-button [:button
-;;                             {:on-click #(swap! doc assoc :new-service-form {})}
-;;                             "Parents / Upstream (+)"]
-;;            the-form [:div.form {:id :new-service-form}
-;;                       [bind-fields
-;;                         [:div
-;;                           [:label "Key"]
-;;                           [:input {:field :text :id :new-service-form.consul-key}]
-;;                           [:label "Value"]
-;;                           [:input {:field :text :id :new-service-form.consul-value}]
-;;                           ]
-;;                         doc]
-;;                       [:button {:id :new-service-form.submit
-;;                                  :on-click #(new-service-form-handler doc %)} "submit"]]]
+;; ;; (defn render-new-service-form []
+;; ;;   (fn [doc]
+;; ;;     (let [add-form-button [:button
+;; ;;                             {:on-click #(swap! doc assoc :new-service-form {})}
+;; ;;                             "Parents / Upstream (+)"]
+;; ;;            the-form [:div.form {:id :new-service-form}
+;; ;;                       [bind-fields
+;; ;;                         [:div
+;; ;;                           [:label "Key"]
+;; ;;                           [:input {:field :text :id :new-service-form.consul-key}]
+;; ;;                           [:label "Value"]
+;; ;;                           [:input {:field :text :id :new-service-form.consul-value}]
+;; ;;                           ]
+;; ;;                         doc]
+;; ;;                       [:button {:id :new-service-form.submit
+;; ;;                                  :on-click #(new-service-form-handler doc %)} "submit"]]]
 
-;;       (if (contains? @doc :new-service-form)
-;;         the-form
-;;         add-form-button))))
+;; ;;       (if (contains? @doc :new-service-form)
+;; ;;         the-form
+;; ;;         add-form-button))))
 
 ;; form should be a ratom
 (defn render-new-service-form [form]
@@ -129,10 +129,12 @@
      [:input {:field :text :id :new-service-form.consul-value}]]
     form]
    [:button {:id :new-service-form.submit
-             :on-click #(dispatch [:submit-new-service-form @form])} "submit"]])
+             :on-click #(dispatch [:show-new-service-form false])} "Cancel"]
+   [:button {:id :new-service-form.submit
+             :on-click #(dispatch [:submit-new-service-form @form])} "Submit"]])
 
 (defn render-add-form-button []
-  [:button {:on-click #(dispatch [:add-new-service-form])}
+  [:button {:on-click #(dispatch [:show-new-service-form true])}
    "Parents / Upstream (+)"])
 
 (defn new-service-form []
@@ -157,7 +159,7 @@
    [:div.content.flexChild.rowParent
     [:div.flexChild {:id "rowUpstream"}
      [new-service-form]
-     (map p/row-parent (:parents detail []))
+     (map p/row-parent (:parents @detail []))
      ]
     [:div.flexChild {:id "rowDetailView"}
      [:div.dash_box
@@ -165,7 +167,7 @@
        [:div.span.opc {:class "up"}
         p/image-spacer
         p/image-opcsprite]]
-      [:div.h1 {:class "green"} (:name detail)]
+      [:div.h1 {:class "green"} (:name @detail)]
       (p/status-text "Healthy" "green")
       (p/opstate-text "Running" "green")
       (p/detail-buttons)]]
@@ -179,14 +181,15 @@
                      }
                  (name child_name)]]
                ]))
-          (:children detail))]]])
+          (:children @detail))]]])
 
 (defn detail-page []
   (let [navigation (subscribe [:navigation])
         datacenters (subscribe [:datacenters])
         name (get-in @navigation [:args :name])
-        detail (first (filter #(= name (:name %)) @datacenters))]
-    (if-not (nil? detail)
+        ;;detail (first (filter #(= name (:name %)) @datacenters))
+        detail (subscribe [:detail])]
+    (if-not (nil? @detail)
       (do
         (render-detail-page detail))
       (not-found))))

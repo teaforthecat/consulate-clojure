@@ -1,6 +1,6 @@
 (ns consulate-simple.routes.home
   (:require [consulate-simple.layout :as layout]
-            [compojure.core :refer [defroutes GET PUT routes make-route context]]
+            [compojure.core :refer [defroutes GET PUT DELETE routes make-route context]]
             [ring.util.http-response :refer [ok not-found bad-gateway]]
             [consulate-simple.consul :as consul]
             [clojure.java.io :as io]
@@ -49,6 +49,24 @@
                                                                   (consul/get-kv-keys consul-key)
                                                                   :else
                                                                   (consul/get-kv consul-key))]
+                                                     (ok result))
+                                                   (catch ExceptionInfo e ;; proxy error handling
+                                                     (let [consul-response (.getData e)]
+                                                       (if (= 404 (:status consul-response))
+                                                         (let [message (str "key not found: " (get-in req [:route-params :*]))]
+                                                           (timbre/info message)
+                                                           (not-found message))
+                                                         (let [message (str "received: " (:status consul-response) " " (:body consul-response))]
+                                                           (timbre/error message)
+                                                           (bad-gateway message)))))))) ;; get-kv
+      (DELETE ["/*"] [scope recurse keys] (fn [req] (try
+                                                   (let [consul-key (get-in req [:route-params :*])
+                                                         result (cond
+                                                                  recurse
+                                                                  (consul/delete-kv-list consul-key)
+                                                                  :else
+                                                                  (consul/delete-kv consul-key))]
+                                                     (timbre/info (str "deleting key: " consul-key))
                                                      (ok result))
                                                    (catch ExceptionInfo e ;; proxy error handling
                                                      (let [consul-response (.getData e)]

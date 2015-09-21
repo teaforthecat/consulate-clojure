@@ -1,6 +1,6 @@
 (ns consulate-simple.partials
   (:require [consulate-simple.config :refer (config)]
-            [re-frame.core :refer [subscribe]]
+            [re-frame.core :refer [subscribe dispatch]]
             [reagent.core :refer [atom]]
             [reagent.session :as session]))
 
@@ -75,16 +75,21 @@
   (let [{:keys [state message]} @(subscribe [:flash])]
     [:div.flash {:class state} message ]))
 
-(defn row-parent [{:keys [id title link key value]}]
-  (let [id (str "123" (clojure.string/join "" (take 4 (repeatedly #(rand-nth "123")))))
-        ;toggler (atom "hide")
+(defn row-parent [{:keys [title link value]}]
+  (let [id (str "123" (clojure.string/join "" (take 4 (repeatedly #(rand-nth "123456")))))
+        ;;    toggler (atom "hide")
+        ;; the key has / in it
+        consul-key (clojure.string/join "/" (filter string? [(namespace title) (name title)]))
+        short-name (name title)
         ]
-    [:div.flexChild {:id id :key id}
+    [:div.flexChild {:key id}
      [:p.titles
       [:span ;{:on-click #(reset! toggler (fn [t] (if (= t "hide") "show" "hide")))}
-       title]
+       consul-key]
+      [:span.delete-object
+       [:button {:on-click #(dispatch [:delete-kv consul-key])} "X"]]
       [:div.parent-value {:class "hide"}
-       value]]]))
+       (str value)]]]))
 
 (defn related-element [{:keys [title link]}]
   [:div.flexChild {:class "related-element"}

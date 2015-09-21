@@ -6,6 +6,7 @@
     [ring.util.codec :as codec]
     [org.httpkit.client :as client]
     [environ.core :refer [env]]
+    [byte-streams :as bs]
     [clojurewerkz.route-one.core :refer [with-base-url url-for]]
     )
   (:import clojure.lang.ExceptionInfo))
@@ -76,6 +77,18 @@
   (let [response (call client/get (url [:kv] {:key key :recurse true}))]
     (map (fn [{:keys [key value]}]
            {key (decode value)})  response)))
+
+(defn delete-kv
+  "delete the value of a key or keys"
+  [key]
+  (let [response (call client/delete (url [:kv] {:key key}))]
+    (bs/convert response String)))
+
+(defn delete-kv-list
+  "delete the value of a key or keys"
+  [key]
+  (let [response (call client/delete (url [:kv] {:key key :recurse true}))]
+    response))
 
 (defn get-kv-keys
   "get the value of a key or keys"

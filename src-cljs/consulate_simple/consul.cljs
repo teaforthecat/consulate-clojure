@@ -42,6 +42,10 @@
   (let [moptions (apply hash-map options)]
     (http/get (str kv-path "/" key) {:query-params moptions})))
 
+(defn delete-kv [key & options]
+  (let [moptions (apply hash-map options)]
+    (http/delete (str kv-path "/" key) {:query-params moptions})))
+
 (defn get-services []
   (http/get services-path))
 

@@ -2,6 +2,7 @@
   (:require [clojure.test :refer (deftest testing is)]
             [ring.mock.request :refer (request)]
             [consulate-simple.handler :refer (app)]
+            [byte-streams :as bs]
             [taoensso.timbre :as timbre])
   (:import clojure.lang.ExceptionInfo))
 
@@ -13,10 +14,14 @@
   (testing "api"
     (testing "kv"
       (with-redefs [consulate-simple.consul/get-kv (fn [key] "world" )
-                    consulate-simple.consul/put-kv (fn [key value] true )]
+                    consulate-simple.consul/put-kv (fn [key value] true )
+                    consulate-simple.consul/delete-kv (fn [key] true )]
         (let [response (app (request :get "/api/kv/hello"))]
           (is (= 200 (:status response)))
           (is (= "world" (:body response))))
+        (let [response (app (request :delete "/api/kv/hello"))]
+          (is (= 200 (:status response)))
+          (is (= "true" (bs/convert (:body response) String))))
         (let [response (app (request :put "/api/kv/hello" "world"))]
           (is (= 200 (:status response)))
           (is (= "success\n" (:body response)))))
