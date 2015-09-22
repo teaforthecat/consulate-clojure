@@ -12,3 +12,4 @@ profiles.clj
 resources/public/js
 /.repl/
 /resources/public/config.edn
+.sass-cache/

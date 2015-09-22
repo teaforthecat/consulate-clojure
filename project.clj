@@ -51,9 +51,11 @@
             [lein-environ "1.0.0"]
             [lein-ancient "0.6.5"]
             [lein-cljsbuild "1.0.6"]
-            [lein-doo "0.1.5-SNAPSHOT"]]
+            [lein-doo "0.1.5-SNAPSHOT"]
+            [lein-sassy "1.0.7"]]
 
-
+  :sass {:src "resources/app/stylesheets"
+         :dst "resources/public/stylesheets"}
 
   :ring {:handler consulate-simple.handler/app
          :init    consulate-simple.handler/init
@@ -83,7 +85,8 @@
   :profiles
   {:uberjar {:omit-source true
              :env {:production true}
-             :hooks [leiningen.cljsbuild]
+             :hooks [leiningen.cljsbuild
+                     leiningen.sass]
              :cljsbuild
              {:jar true
               :builds
@@ -113,7 +116,7 @@
                  {:http-server-root "public"
                   :server-port 3449
                   :nrepl-port 7002
-                  :css-dirs ["resources/public/css"]
+                  :css-dirs ["resources/public/stylesheets"]
                   :ring-handler consulate-simple.handler/app}
 
                  :repl-options {:init-ns consulate-simple.core}
@@ -121,4 +124,6 @@
                               (pjstadig.humane-test-output/activate!)]
                  :env {:dev true}}
                                         ; merges the above with the :profiles/dev section in the untracked file: ./profiles.clj for env settings
+   ;; consider :hooks [leiningen.sass]
+
    :dev [:project/dev :profiles/dev]})

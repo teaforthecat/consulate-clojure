@@ -20,6 +20,8 @@ You will need [Leiningen][1] 2.0 or above installed.
 
     lein figwheel
 
+    lein sass watch # for css compiling and live reloading
+
 Connect to the webserver on port 3449
 
     open http://localhost:3449
