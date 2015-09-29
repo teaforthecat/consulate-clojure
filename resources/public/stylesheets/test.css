@@ -1,0 +1,134 @@
+/* HTML5 display-role reset for old browsers */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  font-family: "Exo", sans-serif; }
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, main {
+  display: block; }
+
+body {
+  line-height: 1em; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after {
+  content: "";
+  content: none; }
+
+/* End of CSS Reset */
+.body {
+  font: 12px / 18px Arial, sans-serif;
+  min-height: 100%;
+  padding: 0;
+  margin: 0;
+  background: #141414; }
+
+.wrapper {
+  padding: 50px 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #141414; }
+
+.content {
+  min-height: 100%; }
+
+/* Header
+ *----------------------------------------------------------------------------- */
+.header {
+  height: 5em;
+  background: #1a1a1a;
+  padding-left: 5em;
+  margin-top: -3em; }
+
+.consulate_logo {
+  padding-top: 1.2em;
+  position: absolute;
+  left: 1.2em; }
+
+/* Footer
+ *----------------------------------------------------------------------------- */
+.footer {
+  height: 2em;
+  background: #1a1a1a;
+  color: #aaaaaa;
+  margin-bottom: -2em;
+  padding-left: 1.2em;
+  padding-top: 1em; }
+
+/* Icons
+ *----------------------------------------------------------------------------- */
+.icon {
+  width: 2em;
+  height: 2em; }
+
+html {
+  box-sizing: border-box; }
+
+*, *::after, *::before {
+  box-sizing: inherit; }
+
+#app {
+  max-width: 68em;
+  margin-left: auto;
+  margin-right: auto; }
+  #app::after {
+    clear: both;
+    content: "";
+    display: table; }
+  #app #nav {
+    max-width: 68em;
+    margin-left: auto;
+    margin-right: auto; }
+    #app #nav::after {
+      clear: both;
+      content: "";
+      display: table; }
+    #app #nav #logo {
+      float: left;
+      display: block;
+      margin-right: 2.35765%;
+      width: 48.82117%; }
+      #app #nav #logo:last-child {
+        margin-right: 0; }
+    #app #nav #login {
+      float: left;
+      display: block;
+      margin-right: 2.35765%;
+      width: 48.82117%; }
+      #app #nav #login:last-child {
+        margin-right: 0; }
+  #app #left-column {
+    float: left;
+    display: block;
+    margin-right: 2.35765%;
+    width: 31.76157%; }
+    #app #left-column:last-child {
+      margin-right: 0; }
+  #app #middle-column {
+    float: left;
+    display: block;
+    margin-right: 2.35765%;
+    width: 31.76157%; }
+    #app #middle-column:last-child {
+      margin-right: 0; }
+  #app #right-column {
+    float: left;
+    display: block;
+    margin-right: 2.35765%;
+    width: 31.76157%; }
+    #app #right-column:last-child {
+      margin-right: 0; }
+
+/*# sourceMappingURL=test.css.map */

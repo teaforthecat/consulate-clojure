@@ -12,10 +12,11 @@
                       "standby" "yellow"
                       "test"    "yellow"})
 
-(def operational-states {"down" "down"
-                         "active" "up"
-                         "standby" "up"
-                         "test" "test"})
+(def operational-states {"down"    "down"
+                         "active"  "up"
+                         "standby" "standby"
+                         "test"    "test"
+                         "down2"   "down2"})
 
 (defn image-header-logo []
   [:img {:alt "Consulate Dashboard Logo"
@@ -31,14 +32,14 @@
   [:img.opcsprite {:src "img/opstate.png"}])
 
 (defn status-text [text color]
-  [:div.statustext
-   [:p.status "Status:  "]
-   [:p.status {:class color} text ]])
+  [:h3  {:class color}
+   [:span "Status:"]
+   [:span text ]])
 
 (defn opstate-text [text color]
-  [:div.optext
-   [:p.opstate "OP State:  "]
-   [:p.status {:class color} text ]])
+  [:h3  {:class color}
+   [:span "OP State:"]
+   [:span text ]])
 
 (defn detail-buttons []
   [:div.detail_buttons
@@ -51,19 +52,13 @@
         main_color (or (get color-states stx) "unknown")
         op_color (or (get color-op-states otx ) "unknown")
         op_state (or (get operational-states otx) "unknown")]
-    [:div.div.datacenter ; todo swap div for datacenter in css
-     [:div.dash_box
-      [:div.opc_holder
-       [:div.span.opc {:class op_state}
-        image-spacer
-        image-opcsprite]]
-      [:a {:href  (str "#/consul/datacenters/" name)
-           ;(routes/path-for :detail-page)
-           }
-       [:div.h1 {:class main_color} name]]
-      [status-text stx main_color]
-      [opstate-text otx op_color]
-      [detail-buttons]]]))
+    [:div.datacenter
+     [:a.detail_title {:class main_color
+                       :href (str "#/consul/datacenters/" name)}
+      name]
+     [:div.detail_state_text [status-text stx main_color]]
+     [:div.detail_state_text [opstate-text otx op_color]]
+     [:div.opc {:class "down2"}  ]]))
 
 (defn header []
   [:div.header
@@ -82,14 +77,14 @@
         consul-key (clojure.string/join "/" (filter string? [(namespace title) (name title)]))
         short-name (name title)
         ]
-    [:div.flexChild {:key id}
-     [:p.titles
-      [:span ;{:on-click #(reset! toggler (fn [t] (if (= t "hide") "show" "hide")))}
-       consul-key]
-      [:span.delete-object
-       [:button {:on-click #(dispatch [:delete-kv consul-key])} "X"]]
-      [:div.parent-value {:class "hide"}
-       (str value)]]]))
+    [:div.parent {:key id}
+     [:div.spacer " "]
+     [:div.consul-key ;{:on-click #(reset! toggler (fn [t] (if (= t "hide") "show" "hide")))}
+      consul-key]
+     [:div.delete-object
+      [:button {:on-click #(dispatch [:delete-kv consul-key])} "X"]]
+     [:div.parent-value {:class "hide"}
+      (str value)]]))
 
 (defn related-element [{:keys [title link]}]
   [:div.flexChild {:class "related-element"}

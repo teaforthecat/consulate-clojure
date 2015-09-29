@@ -18,9 +18,9 @@ You will need [Leiningen][1] 2.0 or above installed.
 
 ## Development
 
+    lein bower install
+    sass --watch resources/app/stylesheets:resources/public/stylesheets
     lein figwheel
-
-    lein sass watch # for css compiling and live reloading
 
 Connect to the webserver on port 3449
 

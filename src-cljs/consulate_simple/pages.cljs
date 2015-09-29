@@ -33,6 +33,13 @@
        (into [:ul.nav.navbar-nav]
              (map nav-link nav-links-with-active))]]]))
 
+(defn wrapper [& stuff]
+  [:div.wrapper
+   [p/header]
+   [p/flash]
+   (into [:div.container] stuff)])
+
+
 (defn not-found []
   [:div "404 Not found"])
 
@@ -56,10 +63,9 @@
 
 (defn datacenters-page []
   (let [datacenters (subscribe [:datacenters])]
-    [:div.wrapper
-     [p/header]
-     (into [:div.flexcontainer.wrap.column] ;;todo allow a "datacenters" div in css to contain them
-           (map p/datacenter @datacenters))]))
+    (wrapper
+     (into [:div.datacenters]
+           (map p/datacenter @datacenters)))))
 
 ;; (defn field-row [label input]
 ;;   [:div.row
@@ -152,36 +158,42 @@
     (let [{status :status nodes :body} (<! (consul/get-service-nodes child-name))]
       (swap! doc update-in [:detail :children :expanded] nodes))))
 
+(defn left-column [parents]
+  [:div.left-column
+   [:div.new-service-form
+    [new-service-form]]
+   [:div.parents
+    (map p/row-parent parents)]])
+
 (defn render-detail-page [detail]
-  [:div.wrapper
-   [p/header]
-   [p/flash]
-   [:div.content.flexChild.rowParent
-    [:div.flexChild {:id "rowUpstream"}
-     [new-service-form]
-     (map p/row-parent (:parents @detail []))
-     ]
-    [:div.flexChild {:id "rowDetailView"}
-     [:div.dash_box
-      [:div.opc_holder
-       [:div.span.opc {:class "up"}
-        p/image-spacer
-        p/image-opcsprite]]
-      [:div.h1 {:class "green"} (:name @detail)]
-      (p/status-text "Healthy" "green")
-      (p/opstate-text "Running" "green")
-      (p/detail-buttons)]]
-    [into [:div.flexChild {:class "rowDownstream"}]
-     (map (fn [child]
-            (let [child_name (first child)]
-              [:div.flexChild {:class "columnChild"}
-               [:p.titles
-                [:a {:href "javascript: void(0);"
-                     :onclick #(dispatch [:expand-child %]) ;(fn [event] (expand-child event child_name doc) )
-                     }
-                 (name child_name)]]
-               ]))
-          (:children @detail))]]])
+  (wrapper
+   ; column 1
+   [:div.flexChild {:id "rowUpstream"}
+    [left-column (:parents @detail [])]
+    ]
+   ; column 2
+   [:div.flexChild {:id "rowDetailView"}
+    [:div.dash_box
+     [:div.opc_holder
+      [:div.span.opc {:class "up"}
+       p/image-spacer
+       p/image-opcsprite]]
+     [:div.h1 {:class "green"} (:name @detail)]
+     (p/status-text "Healthy" "green")
+     (p/opstate-text "Running" "green")
+     (p/detail-buttons)]]
+   ; column 3
+   [into [:div.flexChild {:class "rowDownstream"}]
+    (map (fn [child]
+           (let [child_name (first child)]
+             [:div.flexChild {:class "columnChild"}
+              [:p.titles
+               [:a {:href "javascript: void(0);"
+                    :onclick #(dispatch [:expand-child %]) ;(fn [event] (expand-child event child_name doc) )
+                    }
+                (name child_name)]]
+              ]))
+         (:children @detail))]))
 
 (defn detail-page []
   (let [navigation (subscribe [:navigation])

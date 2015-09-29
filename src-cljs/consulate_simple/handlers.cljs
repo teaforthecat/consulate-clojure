@@ -41,7 +41,7 @@
 
 (register-handler
  :init-new-service-form
- [debug (path :new-service-form)]
+ [ (path :new-service-form)]
  (fn [app-db [_]]
    default-form)) ;; default is to not show the form
 
@@ -62,17 +62,17 @@
 
 (register-handler
  :handle-delete-kv-response
- [debug (path [:detail :parents])]
+ [ (path [:detail :parents])]
  handle-delete-kv-response)
 
 (register-handler
  :delete-kv
- [debug]
+ []
  delete-kv)
 
 (register-handler
  :show-new-service-form
- [debug (path :new-service-form)]
+ [ (path :new-service-form)]
  (fn [form [_ active]]
    (if active
      (merge form {:active true})
@@ -80,7 +80,7 @@
 
 (register-handler
  :flash
- [debug (path :flash)]
+ [ (path :flash)]
  (fn [flash [_ state message]]
    (if (= :hide state)
      {:state :hide}
@@ -91,7 +91,7 @@
 
 (register-handler
  :submit-new-service-form
- [debug (path :new-service-form)]
+ [ (path :new-service-form)]
  (fn [old-form [_ new-form]]
    (let [form (merge old-form new-form)
          key   (get-in form [:new-service-form :consul-key])
@@ -111,7 +111,7 @@
 
 (register-handler
  :handle-kv-response
- [debug (path :new-service-form)]
+ [ (path :new-service-form)]
  (fn [form [_ response]]
    (if (:success response)
      (do
@@ -122,7 +122,7 @@
 
 (register-handler
  :get-kv-data
- [debug]
+ []
  (fn [app-db [_ name]]
    (let [request (consul/get-kv name :recurse true)]
      (take! request (fn [response]
@@ -154,7 +154,7 @@
 
 (register-handler
  :handle-kv-data-response
- [debug]
+ []
  handle-kv-data-response)
 
 ;; (register-handler

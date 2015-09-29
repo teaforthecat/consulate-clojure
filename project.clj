@@ -52,10 +52,20 @@
             [lein-ancient "0.6.5"]
             [lein-cljsbuild "1.0.6"]
             [lein-doo "0.1.5-SNAPSHOT"]
-            [lein-sassy "1.0.7"]]
+            [lein-bower "0.5.1"]
+            ;[lein-sassy "1.0.7"]
+            ]
+
+  ;; installed to resources/public/vendor with lein bower install
+  :bower-dependencies [[bourbon "4.2.4"]
+                       [neat "1.7.2"]]
+;; :dependencies [[org.rubygems/sass "3.2.14"]]
+;; :repositories [["gem-jars" "http://deux.gemjars.org"]]
+
 
   :sass {:src "resources/app/stylesheets"
-         :dst "resources/public/stylesheets"}
+         :dst "resources/public/stylesheets"
+         :gem-version "3.4.18"}
 
   :ring {:handler consulate-simple.handler/app
          :init    consulate-simple.handler/init
@@ -86,7 +96,8 @@
   {:uberjar {:omit-source true
              :env {:production true}
              :hooks [leiningen.cljsbuild
-                     leiningen.sass]
+                     ;leiningen.sass
+                     ]
              :cljsbuild
              {:jar true
               :builds
@@ -100,7 +111,9 @@
                                 [pjstadig/humane-test-output "0.7.0"]
                                 [lein-doo "0.1.5-SNAPSHOT"]
                                 [lein-figwheel "0.3.3"]
-                                [org.clojure/tools.nrepl "0.2.10"]]
+                                [org.clojure/tools.nrepl "0.2.10"]
+                                ;; [org.rubygems/sass "3.4.18"] ;; 3.4+ does not exist in gemjars yet
+                                ]
                  :plugins [[lein-figwheel "0.3.3"]]
 
                  :cljsbuild

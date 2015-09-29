@@ -10,6 +10,7 @@ profiles.clj
 /.env
 *.log
 resources/public/js
-/.repl/
+/resources/public/vendor
 /resources/public/config.edn
 .sass-cache/
+/.repl/

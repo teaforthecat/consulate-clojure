@@ -1,0 +1,18 @@
+/* Operational State Circle Indicator
+ *----------------------------------------------------------------------------- */
+
+.opc {
+  position: absolute;
+  top: 10px;
+  right: -160px; /* why? why negative? */
+  background: url(../img/opstate.png) 0 0 no-repeat;
+  overflow: hidden;
+  width: 329px;
+  height: 329px;
+  transform: scale(0.3) translate(-24em, -24em);
+  &.down2 { background-position: 0 0;  }
+  &.standby { background-position: -329 0;  }
+  &.test { background-position: -658 0;  }
+  &.down { background-position: -987 0;  }
+  &.up { background-position: -1316 0;  }
+}

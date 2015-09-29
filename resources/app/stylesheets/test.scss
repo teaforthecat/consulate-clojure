@@ -1,0 +1,29 @@
+@import "reset";
+@import "site";
+@import "../../public/vendor/bourbon/app/assets/stylesheets/bourbon";
+@import "../../public/vendor/neat/app/assets/stylesheets/neat";
+
+
+
+
+#app {
+  @include outer-container;
+  #nav {
+    @include outer-container;
+    #logo {
+      @include span-columns(6);
+    }
+    #login {
+      @include span-columns(6);
+    }
+  }
+  #left-column {
+    @include span-columns(4);
+  }
+  #middle-column {
+    @include span-columns(4);
+  }
+  #right-column {
+    @include span-columns(4);
+  }
+}
