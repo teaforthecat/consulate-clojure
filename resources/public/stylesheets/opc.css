@@ -113,11 +113,26 @@ html {
   color: #ecd90b; }
 
 /* layout */
+.container {
+  max-width: 68em;
+  margin-left: auto;
+  margin-right: auto; }
+  .container::after {
+    clear: both;
+    content: "";
+    display: table; }
+
 .left-column {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 23.23176%;
   max-width: 68em;
   margin-left: auto;
   margin-right: auto;
   /* text-align: center; */ }
+  .left-column:last-child {
+    margin-right: 0; }
   .left-column::after {
     clear: both;
     content: "";
@@ -137,27 +152,34 @@ html {
       float: left;
       display: block;
       margin-right: 2.35765%;
-      width: 48.82117%;
-      /* @include shift(3); */ }
+      width: 48.82117%; }
       .left-column .parents .parent .consul-key:last-child {
         margin-right: 0; }
     .left-column .parents .parent .delete-object {
       float: left;
       display: block;
       margin-right: 2.35765%;
-      width: 23.23176%;
-      /* @include shift(6); */ }
+      width: 23.23176%; }
       .left-column .parents .parent .delete-object:last-child {
         margin-right: 0; }
 
-.container {
-  max-width: 68em;
-  margin-left: auto;
-  margin-right: auto; }
-  .container::after {
-    clear: both;
-    content: "";
-    display: table; }
+.middle-column {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 48.82117%; }
+  .middle-column:last-child {
+    margin-right: 0; }
+  .middle-column .opc_box {
+    width: 100%; }
+
+.right-column {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 23.23176%; }
+  .right-column:last-child {
+    margin-right: 0; }
 
 .datacenters {
   padding: 20; }
@@ -174,6 +196,13 @@ html {
   padding-bottom: 30px; }
   .datacenter:last-child {
     margin-right: 0; }
+
+.opc_box {
+  position: relative;
+  /* to hold the opc sprite */
+  background-color: #323232;
+  border: 1px solid #626262;
+  padding-bottom: 30px; }
 
 /* Text Stylings
  *----------------------------------------------------------------------------- */

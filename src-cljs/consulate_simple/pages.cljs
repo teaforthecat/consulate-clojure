@@ -2,6 +2,7 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
+            [clojure.string :refer [lower-case]]
             [consulate-simple.partials :as p]
             [consulate-simple.consul :as consul]
             [reagent.session :as session]
@@ -123,6 +124,32 @@
 ;; ;;         the-form
 ;; ;;         add-form-button))))
 
+(defn to-keyword [string]
+  (keyword (clojure.string/lower-case (clojure.string/replace string " " "-" ))))
+
+(defn simple-text-field [label & id]
+  [:div.simple-text-field
+   [:label label]
+   [:input {:field :text :id (or (first id) (to-keyword label))}]])
+
+(defn form-buttons [form event]
+  [:button {:id :cancel
+            :on-click #(dispatch [event false])} "Cancel"]
+  [:button {:id :submit
+            :on-click #(dispatch [event @form])} "Submit"])
+
+(defn render-event-form [form]
+  [:div.form {:id :event-form}
+   [bind-fields
+    [:div
+     (simple-text-field "Name")
+     (simple-text-field "Payload")
+     (simple-text-field "Node Filter")
+     (simple-text-field "Service Filter")
+     (simple-text-field "Tag Filter")]
+    form]
+   (form-buttons form :submit-event-form)])
+
 ;; form should be a ratom
 (defn render-new-service-form [form]
   [:div.form {:id :new-service-form}
@@ -149,6 +176,24 @@
       (render-new-service-form (reagent/atom @form)) ;;the reaction from re-frame won't work
       (render-add-form-button))))
 
+(defn new-child-form []
+  (let [form (subscribe [:new-service-form])]
+    (if (and form (:active @form))
+      (render-new-service-form (reagent/atom @form)) ;;the reaction from re-frame won't work
+      (render-add-form-button))))
+
+(defn event-button [label event]
+  (prn label)
+  (prn event)
+  [:button {:on-click (fn [e] (do (prn e) (dispatch [event])))}
+   label])
+
+(defn event-form []
+  (let [form (subscribe [:event-form])]
+    (if (and form (:active @form))
+      (render-event-form (reagent/atom @form)) ;;the reaction from re-frame won't work
+      (event-button "Add Event" :show-event-form))))
+
 (defn expand-child [event child-name doc]
   (println "expanding-child")
   (println event)
@@ -158,6 +203,11 @@
     (let [{status :status nodes :body} (<! (consul/get-service-nodes child-name))]
       (swap! doc update-in [:detail :children :expanded] nodes))))
 
+
+(defn middle-column [detail]
+  [:div.middle-column
+   [p/opc_box detail]])
+
 (defn left-column [parents]
   [:div.left-column
    [:div.new-service-form
@@ -165,35 +215,49 @@
    [:div.parents
     (map p/row-parent parents)]])
 
+(defn right-column [children]
+  [:div.right-column
+   [:div.new-child-form
+    [event-form]]
+   [:div.children
+    [:div.child "hello world"]]])
+
+
 (defn render-detail-page [detail]
   (wrapper
-   ; column 1
-   [:div.flexChild {:id "rowUpstream"}
-    [left-column (:parents @detail [])]
-    ]
-   ; column 2
-   [:div.flexChild {:id "rowDetailView"}
-    [:div.dash_box
-     [:div.opc_holder
-      [:div.span.opc {:class "up"}
-       p/image-spacer
-       p/image-opcsprite]]
-     [:div.h1 {:class "green"} (:name @detail)]
-     (p/status-text "Healthy" "green")
-     (p/opstate-text "Running" "green")
-     (p/detail-buttons)]]
-   ; column 3
-   [into [:div.flexChild {:class "rowDownstream"}]
-    (map (fn [child]
-           (let [child_name (first child)]
-             [:div.flexChild {:class "columnChild"}
-              [:p.titles
-               [:a {:href "javascript: void(0);"
-                    :onclick #(dispatch [:expand-child %]) ;(fn [event] (expand-child event child_name doc) )
-                    }
-                (name child_name)]]
-              ]))
-         (:children @detail))]))
+   [left-column (:parents @detail [])]
+   [middle-column @detail]
+   [right-column (:children @detail [])]
+
+   ;; ; column 1
+   ;; [:div.flexChild {:id "rowUpstream"}
+
+   ;;  ]
+   ;; ; column 2
+   ;; [:div.flexChild {:id "rowDetailView"}
+   ;;  [:div.dash_box
+   ;;   [:div.opc_holder
+   ;;    [:div.span.opc {:class "up"}
+   ;;     p/image-spacer
+   ;;     p/image-opcsprite]]
+   ;;   [:div.h1 {:class "green"} (:name @detail)]
+   ;;   (p/status-text "Healthy" "green")
+   ;;   (p/opstate-text "Running" "green")
+   ;;   (p/detail-buttons)]]
+   ;; ; column 3
+   ;; [into [:div.flexChild {:class "rowDownstream"}]
+   ;;  (map (fn [child]
+   ;;         (let [child_name (first child)]
+   ;;           [:div.flexChild {:class "columnChild"}
+   ;;            [:p.titles
+   ;;             [:a {:href "javascript: void(0);"
+   ;;                  :onclick #(dispatch [:expand-child %]) ;(fn [event] (expand-child event child_name doc) )
+   ;;                  }
+   ;;              (name child_name)]]
+   ;;            ]))
+   ;;       (:children @detail))]
+   )
+  )
 
 (defn detail-page []
   (let [navigation (subscribe [:navigation])

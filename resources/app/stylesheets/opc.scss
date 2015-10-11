@@ -10,7 +10,12 @@
 .yellow { color: #ecd90b; }
 
 /* layout */
+.container {
+  @include outer-container;
+}
+
 .left-column {
+  @include span-columns(3);
   @include outer-container;
   /* text-align: center; */
   .new-service-form {
@@ -24,19 +29,26 @@
       }
       .consul-key {
         @include span-columns(6);
-        /* @include shift(3); */
       }
       .delete-object {
         @include span-columns(3);
-        /* @include shift(6); */
       }
     }
   }
 }
 
-.container {
-  @include outer-container;
+.middle-column {
+  @include span-columns(6);
+
+  .opc_box {
+    @include fill-parent;
+  }
 }
+
+.right-column {
+  @include span-columns(3);
+}
+
 
 .datacenters {
   padding: 20;
@@ -49,6 +61,14 @@
   border: 1px solid #626262;
   padding-bottom: 30px;
 }
+
+.opc_box {
+  position: relative; /* to hold the opc sprite */
+  background-color: #323232;
+  border: 1px solid #626262;
+  padding-bottom: 30px;
+}
+
 
 /* Text Stylings
  *----------------------------------------------------------------------------- */

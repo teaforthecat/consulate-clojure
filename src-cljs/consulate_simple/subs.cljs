@@ -25,6 +25,11 @@
    (reaction (:new-service-form @db))))
 
 (register-sub
+ :event-form
+ (fn [db]
+   (reaction (:event-form @db))))
+
+(register-sub
  :flash
  (fn [db]
    (reaction (:flash @db))))

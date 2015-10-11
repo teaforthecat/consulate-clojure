@@ -1,10 +1,13 @@
 (ns consulate-simple.handlers
-  (:require-macros [cljs.core.async.macros :refer [go]])
+  (:require-macros [cljs.core.async.macros :refer [go]]
+                   [schema.core :as s])
   (:require [consulate-simple.consul :as consul]
             [consulate-simple.db :as db]
+            [consulate-simple.schemas :as schemas]
             [reagent.session :as session]
             [cljs.core.async :refer [<! take!]]
-            [re-frame.core :refer [register-handler debug path dispatch dispatch-sync]]))
+            [re-frame.core :refer [register-handler debug path dispatch dispatch-sync]]
+            [schema.core :as s]))
 
 ;; inspect the state with
 ;; re-frame.db/app-db
@@ -19,7 +22,25 @@
  :initialize-db
  (fn [app-db _]
    (consul/get-datacenters) ;; async
-   (merge db/default-value app-db)))
+   (merge db/default-db app-db)))
+
+(defn submit-event-form [old-event-form [_ new-event-form]]
+  (if new-event-form
+    (let [event-form (merge old-event-form new-event-form)]
+      (prn event-form)
+      (merge event-form {:active false}))
+    db/default-event-form))
+
+(register-handler
+ :submit-event-form
+ [debug (path :event-form)]
+ submit-event-form)
+
+(register-handler
+ :show-event-form
+ [debug (path :event-form)]
+ (fn [event-form [_]]
+   (update event-form :active (constantly true))))
 
 (register-handler
  :datacenters
@@ -38,6 +59,7 @@
    :new-service-form
    {:consul-key nil
     :consul-value nil}})
+
 
 (register-handler
  :init-new-service-form

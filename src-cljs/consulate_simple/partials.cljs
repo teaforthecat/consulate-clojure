@@ -60,6 +60,23 @@
      [:div.detail_state_text [opstate-text otx op_color]]
      [:div.opc {:class "down2"}  ]]))
 
+(defn opc_box [detail]
+  (let [name "dc2"
+        health_state "down"
+        op_state "up"
+        stx "wut"
+        otx "who"
+        main_color "green"
+        op_color "yellow"]
+    [:div.opc_box
+     [:a.detail_title {:class main_color
+                       :href (str "#/consul/datacenters/" name)}
+      name]
+     [:div.detail_state_text [status-text stx main_color]]
+     [:div.detail_state_text [opstate-text otx op_color]]
+     [:div.opc {:class op_state}  ]]))
+
+
 (defn header []
   [:div.header
     [:div.consulate_logo

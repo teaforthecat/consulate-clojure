@@ -82,7 +82,7 @@
   "delete the value of a key or keys"
   [key]
   (let [response (call client/delete (url [:kv] {:key key}))]
-    (bs/convert response String)))
+    response))
 
 (defn delete-kv-list
   "delete the value of a key or keys"
