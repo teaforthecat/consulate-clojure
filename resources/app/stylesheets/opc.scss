@@ -2,7 +2,11 @@
 @import "site";
 @import "opc_sprite";
 @import "../../public/vendor/bourbon/app/assets/stylesheets/bourbon";
+@import "../../public/vendor/neat/app/assets/stylesheets/neat-helpers";
+/* unfortunately, had to comment: resources/public/vendor/bitters/app/assets/stylesheets/_grid-settings.scss:1 */
+@import "../../public/vendor/bitters/app/assets/stylesheets/grid-settings";
 @import "../../public/vendor/neat/app/assets/stylesheets/neat";
+@import "../../public/vendor/bitters/app/assets/stylesheets/base";
 
 /* color pallete */
 .green  { color: #78c114; }
@@ -69,6 +73,22 @@
   padding-bottom: 30px;
 }
 
+.parent {
+  padding-top: 10px;
+}
+
+/* Form Stylings
+ *----------------------------------------------------------------------------- */
+
+.delete-object button {
+  background-color: #cb2c11;
+  padding:  5px $small-spacing;
+  color: white;
+}
+
+label {
+  color: white;
+}
 
 /* Text Stylings
  *----------------------------------------------------------------------------- */
@@ -91,4 +111,9 @@
     margin: 10 0 0 0;
     padding: 0;
   }
+}
+
+.consul-key {
+  color: white;
+  margin: 3px;
 }

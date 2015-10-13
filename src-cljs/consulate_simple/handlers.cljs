@@ -26,10 +26,26 @@
 
 (defn submit-event-form [old-event-form [_ new-event-form]]
   (if new-event-form
-    (let [event-form (merge old-event-form new-event-form)]
-      (prn event-form)
+    (let [event-form (merge old-event-form new-event-form)
+          ; TODO: coerce or validate event-form
+          ]
+      (go
+        (let [response (<! (consul/put-event event-form))]
+          (if (:success response)
+            (do
+              (dispatch [:flash :success (str "Fired Event")])
+              (dispatch [:handle-event-response response]))
+            (dispatch [:flash :error (str "Error Firing Event")]))          ))
       (merge event-form {:active false}))
     db/default-event-form))
+
+(defn handle-event-response [event-form [_ response]]
+  db/default-event-form)
+
+(register-handler
+ :handle-event-response
+ [debug (path :event-form)]
+ handle-event-response)
 
 (register-handler
  :submit-event-form

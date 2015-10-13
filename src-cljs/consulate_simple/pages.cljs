@@ -133,10 +133,11 @@
    [:input {:field :text :id (or (first id) (to-keyword label))}]])
 
 (defn form-buttons [form event]
-  [:button {:id :cancel
-            :on-click #(dispatch [event false])} "Cancel"]
-  [:button {:id :submit
-            :on-click #(dispatch [event @form])} "Submit"])
+  [:div.form-buttons
+   [:button {:id :cancel
+                               :on-click #(dispatch [event false])} "Cancel"]
+   [:button {:id :submit
+             :on-click #(dispatch [event @form])} "Submit"]])
 
 (defn render-event-form [form]
   [:div.form {:id :event-form}
@@ -183,9 +184,7 @@
       (render-add-form-button))))
 
 (defn event-button [label event]
-  (prn label)
-  (prn event)
-  [:button {:on-click (fn [e] (do (prn e) (dispatch [event])))}
+  [:button {:on-click #(dispatch [event])}
    label])
 
 (defn event-form []

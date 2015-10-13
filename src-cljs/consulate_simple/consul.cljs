@@ -15,6 +15,8 @@
 (def nodes-path (str (:root-path config) "api/catalog/nodes"))
 (def services-path (str (:root-path config) "api/catalog/services"))
 (def service-nodes-path (str (:root-path config) "api/catalog/service/"))
+(def list-events-path (str (:root-path config) "api/event/list"))
+(def fire-event-path (str (:root-path config) "api/event/fire/"))
 
 (defrecord Datacenter [name op_state status])
 (defrecord Parent [id title link key value])
@@ -54,6 +56,12 @@
 
 (defn get-nodes []
   (http/get (str nodes-path)))
+
+(defn get-events []
+  (http/get (str list-events-path)))
+
+(defn put-event [event]
+  (http/put (str fire-event-path (:name event)) {:edn-params event}))
 
 ;; (defn get-datacenter-detail [name app-state]
 ;;   (let [q [:datacenters s/ALL #(= name (:name %))]

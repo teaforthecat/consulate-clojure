@@ -59,7 +59,9 @@
 
   ;; installed to resources/public/vendor with lein bower install
   :bower-dependencies [[bourbon "4.2.4"]
-                       [neat "1.7.2"]]
+                       [neat "1.7.2"]
+                       [bitters "1.1.0"]
+                       ]
 ;; :dependencies [[org.rubygems/sass "3.2.14"]]
 ;; :repositories [["gem-jars" "http://deux.gemjars.org"]]
 
