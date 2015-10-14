@@ -1,14 +1,14 @@
 (ns consulate-simple.consul
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require
-    [consulate-simple.config :refer (config)]
-    ;; [consulate-simple.routes :refer (path-for)]
-    ;; [com.rpl.specter :as s]
-    ;; [consulate-simple.db :as db]
-    [re-frame.core :refer [subscribe dispatch]]
-    [cljs-http.client :as http]
-    [cljs.core.async :refer [<! take!]]
-    [ajax.core :refer [GET PUT POST]]))
+  (:require [consulate-simple.config :refer (config)]
+            [clojure.set :refer [rename-keys]]
+            ;; [consulate-simple.routes :refer (path-for)]
+            ;; [com.rpl.specter :as s]
+            ;; [consulate-simple.db :as db]
+            [re-frame.core :refer [subscribe dispatch]]
+            [cljs-http.client :as http]
+            [cljs.core.async :refer [<! take!]]
+            [ajax.core :refer [GET PUT POST]]))
 
 (def datacenters-path (str (:root-path config) "api/catalog/datacenters"))
 (def kv-path (str (:root-path config) "api/kv"))
@@ -60,8 +60,15 @@
 (defn get-events []
   (http/get (str list-events-path)))
 
+(defn parse-consul-filters [filters]
+  (rename-keys filters {:node-filter :node, :service-filter :service, :tag-filter :tag}))
+
 (defn put-event [event]
-  (http/put (str fire-event-path (:name event)) {:edn-params event}))
+  (let [name (:name event)
+        payload (:payload event)
+        filters (parse-consul-filters (dissoc event :payload :name :active))]
+    ;; for some reason this works :edn-params = request body
+    (http/put (str fire-event-path name) {:query-params filters :edn-params payload})))
 
 ;; (defn get-datacenter-detail [name app-state]
 ;;   (let [q [:datacenters s/ALL #(= name (:name %))]

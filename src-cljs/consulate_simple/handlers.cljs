@@ -39,12 +39,14 @@
       (merge event-form {:active false}))
     db/default-event-form))
 
-(defn handle-event-response [event-form [_ response]]
-  db/default-event-form)
+(defn handle-event-response [app-db [_ response]]
+  (-> app-db
+      (merge {:event-form db/default-event-form})
+      (update-in [:detail :children] conj (:body response))))
 
 (register-handler
  :handle-event-response
- [debug (path :event-form)]
+ [debug]
  handle-event-response)
 
 (register-handler

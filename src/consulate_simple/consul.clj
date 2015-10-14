@@ -1,14 +1,13 @@
 (ns consulate-simple.consul
-  (:require
-    [clojure.string :refer (blank?)]
-    [taoensso.timbre :as timbre]
-    [cheshire.core :refer (generate-string parse-string)]
-    [ring.util.codec :as codec]
-    [org.httpkit.client :as client]
-    [environ.core :refer [env]]
-    [byte-streams :as bs]
-    [clojurewerkz.route-one.core :refer [with-base-url url-for]]
-    )
+  (:require [clojure.string :refer (blank?)]
+            [clojure.set :refer [rename-keys]]
+            [taoensso.timbre :as timbre]
+            [cheshire.core :refer (generate-string parse-string)]
+            [ring.util.codec :as codec]
+            [org.httpkit.client :as client]
+            [environ.core :refer [env]]
+            [byte-streams :as bs]
+            [clojurewerkz.route-one.core :refer [with-base-url url-for]])
   (:import clojure.lang.ExceptionInfo))
 
 (timbre/refer-timbre)
@@ -133,7 +132,8 @@
 
 ;; events
 (defn put-event [event body & [filters :or {}]]
-  (call client/put (url [:event :fire] (merge {:event event} filters)) body))
+  (let [response (call client/put (url [:event :fire] (merge {:event event} filters)) body)]
+    (update-in response [:payload] decode)))
 
 (defn get-events [& event] ;;up to 256 events
   (let [response (call client/get (url [:event :list] (if event {:name event})))]

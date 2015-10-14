@@ -98,8 +98,10 @@
       (GET "/list" [name] (ok (consul/get-events name)))
       (PUT "/fire/:event" [event]
         (fn [req]
-          (timbre/info req)
           (let [value (coerce-body req)]
+            ;; (timbre/info (str "value: " value))
+            ;; (timbre/info (str "event: " event))
+            ;; (timbre/info (str "params: " (:params req)))
             (ok (consul/put-event event
                                   value
                                   (:params req)))))))))

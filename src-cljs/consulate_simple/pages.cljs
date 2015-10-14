@@ -218,8 +218,9 @@
   [:div.right-column
    [:div.new-child-form
     [event-form]]
-   [:div.children
-    [:div.child "hello world"]]])
+   (into [:div.children]
+         (map (fn [c] [:div.child {:id (:id c)} (:name c)])
+              children))])
 
 
 (defn render-detail-page [detail]
