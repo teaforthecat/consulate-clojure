@@ -413,7 +413,7 @@ label {
   margin: 10 0 0 0;
   padding: 0; }
 
-.consul-key {
+.consul-key, .child {
   color: white;
   margin: 3px; }
 

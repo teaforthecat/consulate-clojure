@@ -214,20 +214,34 @@
    [:div.parents
     (map p/row-parent parents)]])
 
-(defn right-column [children]
-  [:div.right-column
-   [:div.new-child-form
-    [event-form]]
-   (into [:div.children]
-         (map (fn [c] [:div.child {:id (:id c)} (:name c)])
-              children))])
+(defn right-column []
+  (let [children (subscribe [:children])]
+    (prn children)
+    (fn []
+      [:div.right-column
+       [:div.new-child-form
+        [event-form]]
+       (into [:div.children]
+             (if @children
+               (map (fn [child]
+                      [:div.child {:id (:id child)
+                                   :on-click #(dispatch [:toggle-display-child (:id child)])}
+                       (:name child)
+                       (into [:div.expanded-info {:class (if (:display child) "show" "hide")}]
+                             [[:span.info-text "info-text"]]
+                                        ;??????                             [[:div.info (:node-filter child)]]
+                             ;; (map #([:div.info "hello world"])
+                             ;;      [:payload :node-filter :service-filter :tag-filter])
+                             )])
+                    @children)
+               [[:div.child "hello"]]))])))
 
 
 (defn render-detail-page [detail]
   (wrapper
    [left-column (:parents @detail [])]
    [middle-column @detail]
-   [right-column (:children @detail [])]
+   [right-column]
 
    ;; ; column 1
    ;; [:div.flexChild {:id "rowUpstream"}

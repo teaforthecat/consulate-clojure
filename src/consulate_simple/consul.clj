@@ -136,9 +136,11 @@
     (update-in response [:payload] decode)))
 
 (defn get-events [& event] ;;up to 256 events
-  (let [response (call client/get (url [:event :list] (if event {:name event})))]
+  (let [maybe-event-name (if (first event) {:name (first event)}) ;; todo use destructuring
+        response (call client/get (url [:event :list] maybe-event-name))]
     (map #(update-in % [:payload] decode) response)))
 
+;;(prn (get-events nil))
 
 ;; status
 (defn get-status []

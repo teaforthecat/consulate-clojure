@@ -10,6 +10,10 @@
 ;; #[{"dc1/this":"\"that\""},{"dc1/x":"\"y\""},{"dc1/y/a/b":"\"c\""},{"dc1/z":"\"zzz\""}]
 
 
+;; (deftest events-response-triggers-something
+;;   (let [response {:status 200 :body [{:x "y"}]}]
+;;     ))
+
 (def validates-event
   (let [thing {:name "hello"
                :payload "hello"

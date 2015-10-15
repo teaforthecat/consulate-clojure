@@ -17,7 +17,7 @@
             [goog.history.EventType :as EventType]
             [markdown.core :refer [md->html]]
             [consulate-simple.consul :as consul]
-            [consulate-simple.handlers]
+            [consulate-simple.handlers :as handlers]
             [consulate-simple.subs]
             [consulate-simple.pages :refer [current_page navbar]]
             [ajax.core :refer [GET POST]])

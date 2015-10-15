@@ -20,6 +20,11 @@
    (reaction (:detail @db))))
 
 (register-sub
+ :children
+ (fn [db]
+   (reaction (:children (:detail @db)))))
+
+(register-sub
  :new-service-form
  (fn [db]
    (reaction (:new-service-form @db))))

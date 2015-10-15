@@ -66,11 +66,48 @@
  (fn [app-db [_ response]]
    (vec (map consul/datacenter response))))
 
+(defn handle-events-response [detail [_ response]]
+  (let [events (:body response)]
+    (update detail :children (constantly events))))
+
+(register-handler
+ :handle-events-response
+ [debug (path :detail)]
+ handle-events-response)
+
+(defn detail-hook []
+  (go
+    (let [response (<! (consul/get-events))]
+      (if (:success response)
+        (dispatch [:handle-events-response response])
+        (prn response)))))
+
+(defn run-nav-hooks [app-db [_ page]]
+  ((get {:detail detail-hook} page))
+  nil);async only
+
+(register-handler
+ :run-nav-hooks
+ []
+ run-nav-hooks)
+
 (register-handler
  :navigate
  [(path :navigation)]
  (fn [app-db [_ page query-params]]
+   (dispatch [:run-nav-hooks page])
    {:page page :args query-params}))
+
+(defn toggle-display-child [children [_ id]]
+  (let [pos (position #(= id (:id %)) children)]
+    (update-in children [pos :display] not)))
+
+;(toggle-display-child [{:id "x"} {:id "y"}] [:x  "x"])
+
+(register-handler
+ :toggle-display-child
+ [debug (path :detail :children)]
+ toggle-display-child)
 
 (def default-form
   {:active false
@@ -102,7 +139,7 @@
 
 (register-handler
  :handle-delete-kv-response
- [ (path [:detail :parents])]
+ [(path [:detail :parents])]
  handle-delete-kv-response)
 
 (register-handler
